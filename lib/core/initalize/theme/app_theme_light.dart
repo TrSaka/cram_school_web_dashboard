@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_school/core/utils/color/scheme_colors.dart';
 
 mixin AppThemeLight implements ThemeData {
-  //ackgroundColor: Colors.grey.shade100,
   static ThemeData theme = ThemeData(
-      //add sizes
-      );
+    //add sizes
+    primaryColor: UIColors.PRIMARY_COLOR,
+    visualDensity: VisualDensity.adaptivePlatformDensity,
+  );
 }

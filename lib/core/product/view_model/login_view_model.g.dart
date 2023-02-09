@@ -25,8 +25,35 @@ mixin _$LoginViewModel on _LoginViewModelBase, Store {
     });
   }
 
+  late final _$lockStateAtom =
+      Atom(name: '_LoginViewModelBase.lockState', context: context);
+
+  @override
+  bool get lockState {
+    _$lockStateAtom.reportRead();
+    return super.lockState;
+  }
+
+  @override
+  set lockState(bool value) {
+    _$lockStateAtom.reportWrite(value, super.lockState, () {
+      super.lockState = value;
+    });
+  }
+
   late final _$_LoginViewModelBaseActionController =
       ActionController(name: '_LoginViewModelBase', context: context);
+
+  @override
+  void changeLockState() {
+    final _$actionInfo = _$_LoginViewModelBaseActionController.startAction(
+        name: '_LoginViewModelBase.changeLockState');
+    try {
+      return super.changeLockState();
+    } finally {
+      _$_LoginViewModelBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void increment() {
@@ -42,7 +69,8 @@ mixin _$LoginViewModel on _LoginViewModelBase, Store {
   @override
   String toString() {
     return '''
-userCount: ${userCount}
+userCount: ${userCount},
+lockState: ${lockState}
     ''';
   }
 }
