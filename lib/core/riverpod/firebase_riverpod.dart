@@ -8,8 +8,8 @@ class FirebaseProvider extends ChangeNotifier {
   bool _isLoading = false;
   UserCredential? _userCredential;
 
-  AuthService auth = AuthService.instance!;
-  FirestoreService database = FirestoreService.instance!;
+  AuthService auth = AuthService.instance!; //from repo
+  FirestoreService database = FirestoreService.instance!; //from repo
 
   bool get isLoading => _isLoading;
   UserCredential? get userCredentinal => _userCredential;
@@ -17,7 +17,8 @@ class FirebaseProvider extends ChangeNotifier {
   Future<UserCredential>? loginUser(
       int id, String email, String password) async {
     _userCredential = await auth.signInMethod(id, email, password);
-    return _userCredential!; //uer in !
+    return _userCredential!;
+    //uer in !
   }
 
   Future<bool> validateSchool(int id) async {

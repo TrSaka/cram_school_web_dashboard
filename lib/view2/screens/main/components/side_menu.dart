@@ -1,4 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_school/core/product/router/nav_route.dart';
+import 'package:flutter_school/core/product/router/router.dart';
 import 'package:flutter_school/view2/constants.dart';
 
 class SideMenu extends StatelessWidget {
@@ -30,8 +33,12 @@ class SideMenu extends StatelessWidget {
               press: () {},
             ),
             DrawerListTile(
-              title: "Duyurular",
-              press: () {},
+              title: "Çıkış Yap",
+              press: () async {
+                await FirebaseAuth.instance.signOut();
+                print("Signed out");
+                NavRoute(LoginRoute()).toPushReplecement(context);
+              },
             ),
           ],
         ),

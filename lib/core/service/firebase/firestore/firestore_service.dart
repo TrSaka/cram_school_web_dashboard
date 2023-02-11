@@ -1,3 +1,6 @@
+// ignore_for_file: prefer_conditional_assignment
+
+import 'package:flutter/material.dart';
 import 'package:flutter_school/core/service/firebase/firestore/base_firestore_service.dart';
 
 class FirestoreService extends BaseFirestoreService {
@@ -15,8 +18,8 @@ class FirestoreService extends BaseFirestoreService {
       // Get reference to Firestore collection
       var collectionRef = database.collection("CRAM SCHOOL");
       var document = await collectionRef.doc(id.toString()).get();
-      if (document.exists) {
-        print("School was exist");
+      if (document.exists == true) {
+        debugPrint("School was exist");
         return true; //if user's cram school is in database
       } else {
         return false; //if user's scram schools is not in the database

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_school/core/widgets/auth/text_forms.dart';
-
 import 'custom_divider.dart';
 import 'login_button.dart';
+import 'remember_me_button.dart';
 
 class LoginFieldWidget extends StatelessWidget {
   const LoginFieldWidget({super.key});
@@ -49,6 +49,7 @@ class LoginFieldWidget extends StatelessWidget {
                         const CompanyForm(),
                         const EmailForm(),
                         const PasswordForm(),
+                        const RememberMeButton(),
                         const LoginButton(text: "Sign In"),
                       ],
                     ),

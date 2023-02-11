@@ -1,32 +1,33 @@
 import 'package:flutter_school/core/constants/enums/cache_enum.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class LocaleManagement {
-  //Singleton
-  static late SharedPreferences _preferences;
-
-  static Future<SharedPreferences> initalize() async {
-    _preferences = await SharedPreferences.getInstance();
-    return _preferences;
+class LocalManagement {
+  LocalManagement._init() {
+    SharedPreferences.getInstance().then((value) {
+      _preferences = value;
+    });
   }
 
-  static cacheString(SharedPreferencesKeys key, String value) async {
-    _preferences != null
-        ? await _preferences.setString(key.toString(), value)
-        : null;
+  static final LocalManagement _instance = LocalManagement._init();
+
+  SharedPreferences? _preferences;
+  static LocalManagement get instance => _instance;
+
+  static Future prefrencesInit() async {
+    instance._preferences ??= await SharedPreferences.getInstance();
   }
 
-  static cacheInteger(SharedPreferences key, int value) async {
-    _preferences != null
-        ? await _preferences.setInt(key.toString(), value)
-        : null;
+  Future<void> cacheString(SharedPreferencesKeys key, String value) async {
+    await _preferences!.setString(key.toString(), value);
   }
 
-  static fetchString(SharedPreferencesKeys key) async {
-    _preferences != null ? await _preferences.getString(key.toString()) : null;
+  Future<void> cacheInteger(SharedPreferencesKeys key, int value) async {
+    await _preferences!.setInt(key.toString(), value);
   }
 
-  static fetchInteger(SharedPreferences key) async {
-    _preferences != null ? await _preferences.getInt(key.toString()) : null;
-  }
+  String? fetchString(SharedPreferencesKeys key) =>
+      _preferences?.getString(key.toString());
+
+  int? fetchInteger(SharedPreferencesKeys key) =>
+      _preferences!.getInt(key.toString());
 }

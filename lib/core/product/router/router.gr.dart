@@ -17,6 +17,12 @@ class _$AppRouter extends RootStackRouter {
 
   @override
   final Map<String, PageFactory> pagesMap = {
+    SplashRoute.name: (routeData) {
+      return MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: const SplashView(),
+      );
+    },
     LoginRoute.name: (routeData) {
       return MaterialPageX<dynamic>(
         routeData: routeData,
@@ -36,8 +42,12 @@ class _$AppRouter extends RootStackRouter {
         RouteConfig(
           '/#redirect',
           path: '/',
-          redirectTo: '/login',
+          redirectTo: '/loading',
           fullMatch: true,
+        ),
+        RouteConfig(
+          SplashRoute.name,
+          path: '/loading',
         ),
         RouteConfig(
           LoginRoute.name,
@@ -48,6 +58,18 @@ class _$AppRouter extends RootStackRouter {
           path: '/dashboard',
         ),
       ];
+}
+
+/// generated route for
+/// [SplashView]
+class SplashRoute extends PageRouteInfo<void> {
+  const SplashRoute()
+      : super(
+          SplashRoute.name,
+          path: '/loading',
+        );
+
+  static const String name = 'SplashRoute';
 }
 
 /// generated route for

@@ -1,6 +1,7 @@
-// ignore_for_file: unnecessary_null_comparison
+// ignore_for_file: unnecessary_null_comparison, prefer_conditional_assignment
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_school/core/service/firebase/auth/base_fireabase.dart';
 
 class AuthService extends BaseFirebaseService {
@@ -26,7 +27,7 @@ class AuthService extends BaseFirebaseService {
     try {
       UserCredential response = await auth.signInWithEmailAndPassword(
           email: email, password: password);
-      print("user logged in ");
+      debugPrint("user logged in ");
       return response;
     } catch (e) {
       rethrow;
