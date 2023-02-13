@@ -30,4 +30,12 @@ class LocalManagement {
 
   int? fetchInteger(SharedPreferencesKeys key) =>
       _preferences!.getInt(key.toString());
+
+  Future<void> deleteString(SharedPreferencesKeys key) async {
+    await _preferences!.remove(key.toString());
+  }
+
+  Future<void> deleteInteger(SharedPreferencesKeys key) async {
+    await _preferences!.remove(key.toString());
+  }
 }

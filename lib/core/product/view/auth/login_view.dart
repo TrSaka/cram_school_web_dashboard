@@ -1,19 +1,16 @@
 // ignore_for_file: unused_field
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_school/core/base/view/base_view.dart';
 import 'package:flutter_school/core/constants/app/app_constants.dart';
+import 'package:flutter_school/core/widgets/auth/text_forms.dart';
 import '../../../base/state/base_state.dart';
-import '../../../constants/enums/cache_enum.dart';
-import '../../../riverpod/firebase_riverpod.dart';
-import '../../../service/cache/locale_management.dart';
+
 import '../../../widgets/auth/background_colors.dart';
 import '../../../widgets/auth/background_text.dart';
 import '../../../widgets/auth/copy_right.dart';
 import '../../../widgets/auth/login_field.dart';
-import '../../router/nav_route.dart';
-import '../../router/router.dart';
-import '../../view_model/login_view_model.dart';
+
+import '../../view_model/auth/login_view_model.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -31,6 +28,9 @@ class _LoginViewState extends BaseState<LoginView> {
   @override
   Widget build(BuildContext context) {
     return BaseView<LoginViewModel>(
+        onDispose: () {
+          viewModel.clearControllers();
+        },
         onModelReady: (model) => _viewModel = model,
         viewModel: LoginViewModel(),
         onPageBuilder: (context, value) {

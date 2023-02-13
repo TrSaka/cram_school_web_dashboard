@@ -21,12 +21,12 @@ class BaseView<T extends Store> extends StatefulWidget {
 }
 
 class _BaseViewState<T extends Store> extends State<BaseView<T>> {
-  
   late T viewModel;
 
   @override
   void initState() {
     viewModel = widget.viewModel;
+
     widget.onModelReady(viewModel);
 
     super.initState();

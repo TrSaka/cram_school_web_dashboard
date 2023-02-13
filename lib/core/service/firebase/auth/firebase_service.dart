@@ -3,6 +3,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_school/core/service/firebase/auth/base_fireabase.dart';
+import 'package:flutter_school/models/user_model.dart';
 
 class AuthService extends BaseFirebaseService {
   static AuthService? _instance;
@@ -23,10 +24,10 @@ class AuthService extends BaseFirebaseService {
   }
 
   @override
-  Future signInMethod(int id, String email, String password) async {
+  Future signInMethod(AuthModel model) async {
     try {
       UserCredential response = await auth.signInWithEmailAndPassword(
-          email: email, password: password);
+          email: model.email, password: model.password);
       debugPrint("user logged in ");
       return response;
     } catch (e) {
@@ -37,5 +38,14 @@ class AuthService extends BaseFirebaseService {
   @override
   Future signOutMethod() {
     return auth.signOut();
+  }
+
+  @override
+  bool checkUser() {
+    if (auth.currentUser == null) {
+      return false;
+    } else {
+      return true;
+    }
   }
 }

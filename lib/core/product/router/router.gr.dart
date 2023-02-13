@@ -29,10 +29,10 @@ class _$AppRouter extends RootStackRouter {
         child: const LoginView(),
       );
     },
-    MainRoute.name: (routeData) {
+    MenuRoute.name: (routeData) {
       return MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const MainView(),
+        child: const MenuView(),
       );
     },
   };
@@ -54,7 +54,7 @@ class _$AppRouter extends RootStackRouter {
           path: '/login',
         ),
         RouteConfig(
-          MainRoute.name,
+          MenuRoute.name,
           path: '/dashboard',
         ),
       ];
@@ -85,13 +85,13 @@ class LoginRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [MainView]
-class MainRoute extends PageRouteInfo<void> {
-  const MainRoute()
+/// [MenuView]
+class MenuRoute extends PageRouteInfo<void> {
+  const MenuRoute()
       : super(
-          MainRoute.name,
+          MenuRoute.name,
           path: '/dashboard',
         );
 
-  static const String name = 'MainRoute';
+  static const String name = 'MenuRoute';
 }

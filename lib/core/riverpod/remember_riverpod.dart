@@ -11,6 +11,4 @@ class RememberProvider extends StateNotifier<bool> {
     state = !state;
   
   }
-
-
 }

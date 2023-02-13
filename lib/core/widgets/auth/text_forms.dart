@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_school/core/constants/app/app_constants.dart';
-import '../../product/view_model/login_view_model.dart';
+import '../../product/view_model/auth/login_view_model.dart';
 
 LoginViewModel viewModel = LoginViewModel();
 

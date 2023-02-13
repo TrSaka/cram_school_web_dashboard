@@ -1,14 +1,14 @@
 // ignore_for_file: unused_local_variable
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_school/core/constants/enums/cache_enum.dart';
 import 'package:flutter_school/core/product/router/nav_route.dart';
-import 'package:flutter_school/core/product/view_model/login_view_model.dart';
+import 'package:flutter_school/core/product/view_model/auth/login_view_model.dart';
 import 'package:flutter_school/core/riverpod/firebase_riverpod.dart';
 import 'package:flutter_school/core/riverpod/remember_riverpod.dart';
 import 'package:flutter_school/core/service/cache/locale_management.dart';
 import 'package:flutter_school/core/utils/color/scheme_colors.dart';
+import 'package:flutter_school/models/user_model.dart';
 import '../../product/router/router.dart';
 
 class LoginButton extends ConsumerWidget {
@@ -51,9 +51,11 @@ class LoginButton extends ConsumerWidget {
             ),
           ),
           onTap: () async {
-            authNotifier.database
-                .validateCompanyId(int.parse(idController.text))
-                .then(
+            AuthModel model = AuthModel(
+                numberID: int.parse(idController.text),
+                email: emailController.text,
+                password: passwordController.text);
+            authNotifier.database.validateCompanyId(model).then(
               (state) {
                 //validated school id in here !
 
@@ -61,9 +63,12 @@ class LoginButton extends ConsumerWidget {
                   // if exist
                   return authNotifier
                       .loginUser(
-                          int.parse(idController.text), //run the login method
-                          emailController.text,
-                          passwordController.text)
+                    AuthModel(
+                        numberID: int.parse(idController.text),
+                        email: emailController.text,
+                        password:
+                            passwordController.text), //run the login method
+                  )
                       ?.then((value) {
                     if (rememberMeState == true) {
                       LocalManagement.instance.cacheString(
@@ -108,7 +113,7 @@ class LoginButton extends ConsumerWidget {
                       */
                     }
 
-                    NavRoute(const MainRoute()).toPushReplecement(context);
+                    NavRoute(const MenuRoute()).toPushReplecement(context);
                   });
                 } else if (state == false) {
                   //else give an error

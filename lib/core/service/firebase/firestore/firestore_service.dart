@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_school/core/service/firebase/firestore/base_firestore_service.dart';
 
+import '../../../../models/user_model.dart';
+
 class FirestoreService extends BaseFirestoreService {
   static FirestoreService? _instance;
   static FirestoreService? get instance {
@@ -13,11 +15,11 @@ class FirestoreService extends BaseFirestoreService {
   FirestoreService._init();
 
   @override
-  Future<bool> validateCompanyId(int id) async {
+  Future<bool> validateCompanyId(AuthModel model) async {
     try {
       // Get reference to Firestore collection
       var collectionRef = database.collection("CRAM SCHOOL");
-      var document = await collectionRef.doc(id.toString()).get();
+      var document = await collectionRef.doc(model.numberID.toString()).get();
       if (document.exists == true) {
         debugPrint("School was exist");
         return true; //if user's cram school is in database
@@ -25,7 +27,7 @@ class FirestoreService extends BaseFirestoreService {
         return false; //if user's scram schools is not in the database
       }
     } catch (e) {
-      rethrow; //for errors
+      return false; //for errors
     }
   }
 }
