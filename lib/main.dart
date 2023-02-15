@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_school/core/initalize/theme/app_theme_light.dart';
 import 'core/product/router/router.dart';
+import 'core/service/cache/locale_management.dart';
 import 'firebase_options.dart';
 import 'package:stack_trace/stack_trace.dart' as stack_trace;
 
@@ -16,6 +17,7 @@ void main() async {
   };
   WidgetsFlutterBinding.ensureInitialized();
   //Shared Preferences initalized
+  await LocalManagement.prefrencesInit();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

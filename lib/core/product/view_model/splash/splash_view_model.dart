@@ -1,10 +1,9 @@
 // ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_school/core/constants/enums/cache_enum.dart';
 import 'package:mobx/mobx.dart';
 import '../../../../models/auth_model.dart';
-import '../../../constants/enums/cache_enum.dart';
 import '../../../riverpod/firebase_riverpod.dart';
 import '../../../service/cache/locale_management.dart';
 import '../../router/nav_route.dart';
@@ -15,31 +14,23 @@ class SplashViewModel = _SplashViewModelBase with _$SplashViewModel;
 
 abstract class _SplashViewModelBase with Store {
   void validate(WidgetRef ref, BuildContext context) async {
-    await LocalManagement.prefrencesInit();
+    late AuthModel authData;
 
+    var data = await LocalManagement.instance
+        .fetchAuth(SharedPreferencesKeys.CACHE_AUTH.toString());
 
-
-    String? email =
-        LocalManagement.instance.fetchString(SharedPreferencesKeys.EMAIL_KEY);
-
-    String? password = LocalManagement.instance
-        .fetchString(SharedPreferencesKeys.PASSWORD_KEY);
-
-    int? idKey =
-        LocalManagement.instance.fetchInteger(SharedPreferencesKeys.ID_KEY);
-
-    if (email != null && password != null && idKey != null) {
-      AuthModel userModel =
-          AuthModel(numberID: idKey, email: email, password: password);
+    if (data['status'] != false) {
+      authData = AuthModel.fromMap(data);
+      AuthModel userModel = AuthModel(
+        numberID: authData.numberID,
+        email: authData.email,
+        password: authData.password,
+      );
       try {
-        ref
-            .read(authProvider)
-            .database
-            .validateCompanyId(userModel)
-            .then((status) {
+        ref.read(authProvider).validateAdmin(userModel)!.then((status) {
           if (status == true) {
             try {
-              ref.read(authProvider).auth.signInMethod(userModel).then(
+              ref.read(authProvider).loginUser(userModel)?.then(
                     (value) =>
                         NavRoute(const MenuRoute()).toPushReplecement(context),
                   );

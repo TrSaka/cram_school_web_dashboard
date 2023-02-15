@@ -55,12 +55,10 @@ class LoginButton extends ConsumerWidget {
                 numberID: int.parse(idController.text),
                 email: emailController.text,
                 password: passwordController.text);
-            authNotifier.database.validateCompanyId(model).then(
-              (state) {
-                //validated school id in here !
 
-                if (state == true) {
-                  // if exist
+            authNotifier.validateAdmin(model)!.then(
+              (value) {
+                if (value == true) {
                   return authNotifier
                       .loginUser(
                     AuthModel(
@@ -70,25 +68,22 @@ class LoginButton extends ConsumerWidget {
                             passwordController.text), //run the login method
                   )
                       ?.then((value) {
-                    if (rememberMeState == true) {
-                      LocalManagement.instance.cacheString(
-                          SharedPreferencesKeys.EMAIL_KEY,
-                          emailController.text);
-//not val
-                      LocalManagement.instance.cacheString(
-                          SharedPreferencesKeys.PASSWORD_KEY,
-                          passwordController.text);
+                    switch (rememberMeState) {
+                      case true:
+                        LocalManagement.instance
+                            .cacheAuth(model, rememberMeState);
+                        break;
+                      case false:
+                        debugPrint("User do not selected remember me button");
+                        break;
 
-                      LocalManagement.instance.cacheInteger(
-                          SharedPreferencesKeys.ID_KEY,
-                          int.parse(idController.text));
+                      default:
+                        LocalManagement.instance
+                            .cacheAuth(model, rememberMeState);
                     }
 
                     NavRoute(const MenuRoute()).toPushReplecement(context);
                   });
-                } else if (state == false) {
-                  //else give an error
-                  debugPrint("Not found user or cram school id");
                 }
               },
             );
@@ -97,5 +92,9 @@ class LoginButton extends ConsumerWidget {
         const SizedBox(height: 32),
       ],
     );
+  }
+
+  cacheValue(SharedPreferencesKeys key, var value) {
+    return LocalManagement.instance.cacheString(key, value);
   }
 }

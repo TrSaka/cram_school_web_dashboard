@@ -25,33 +25,29 @@ class DrawerMenu extends ConsumerWidget {
           children: [
             const DrawerHeader(child: FlutterLogo()),
             DrawerListTile(
-              iconData: Icons.people_rounded,
-              title: "Öğrencilerim",
-              press: () {
-                changePage(ref, 0);
-              },
-            ),
+                iconData: Icons.people_rounded,
+                title: "Öğrencilerim",
+                press: () {
+                  changePage(ref, 0);
+                }),
             DrawerListTile(
-              iconData: Icons.article_rounded,
-              title: "Sınav Sonuçları",
-              press: () {
-                changePage(ref, 1);
-              },
-            ),
+                iconData: Icons.article_rounded,
+                title: "Sınav Sonuçları",
+                press: () {
+                  changePage(ref, 1);
+                }),
             DrawerListTile(
-              iconData: Icons.add_alert_rounded,
-              title: "Duyurular",
-              press: () {
-                changePage(ref, 2);
-              },
-            ),
+                iconData: Icons.add_alert_rounded,
+                title: "Duyurular",
+                press: () {
+                  changePage(ref, 2);
+                }),
             DrawerListTile(
-              iconData: Icons.settings,
-              title: "Ayarlar",
-              press: () {
-                changePage(ref, 3);
-              },
-            ),
+                iconData: Icons.settings,
+                title: "Ayarlar",
+                press: () {
+                  changePage(ref, 3);
+                }),
             DrawerListTile(
               iconData: Icons.logout_rounded,
               title: "Çıkış Yap",

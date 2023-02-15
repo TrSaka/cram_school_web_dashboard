@@ -28,7 +28,7 @@ class _StudentsViewState extends ConsumerState<StudentsView> {
             centerTitle: true,
             backgroundColor: Theme.of(context).primaryColor,
             title: const Text("Öğrencilerim"), //app bar title
-            actions:  [
+            actions: [
               StudentAddButtonWidget(),
             ],
           ),
@@ -42,8 +42,7 @@ class _StudentsViewState extends ConsumerState<StudentsView> {
                     const SizedBox(height: 10),
                     Expanded(
                       child: FutureBuilder(
-                        future:
-                            ref.watch(authProvider).database.getStudents(1402),
+                        future: ref.watch(authProvider).getUsers(1402),
                         builder: (context, AsyncSnapshot snapshot) {
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {

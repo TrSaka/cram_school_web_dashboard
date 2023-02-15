@@ -1,5 +1,10 @@
+// ignore_for_file: unrelated_type_equality_checks
+
+import 'dart:convert';
+
 import 'package:flutter_school/core/constants/enums/cache_enum.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 
 class LocalManagement {
   LocalManagement._init() {
@@ -7,6 +12,9 @@ class LocalManagement {
       _preferences = value;
     });
   }
+
+  final _jsonString =
+      '{"status": false, "extra": null}';
 
   static final LocalManagement _instance = LocalManagement._init();
 
@@ -26,7 +34,7 @@ class LocalManagement {
   }
 
   String? fetchString(SharedPreferencesKeys key) =>
-      _preferences?.getString(key.toString());
+      _preferences!.getString(key.toString());
 
   int? fetchInteger(SharedPreferencesKeys key) =>
       _preferences!.getInt(key.toString());
@@ -37,5 +45,22 @@ class LocalManagement {
 
   Future<void> deleteInteger(SharedPreferencesKeys key) async {
     await _preferences!.remove(key.toString());
+  }
+
+  Future? cacheAuth(model, bool remembered) async {
+    return await _preferences!.setString(
+        remembered == true
+            ? SharedPreferencesKeys.CACHE_AUTH.toString()
+            : SharedPreferencesKeys.HIDE_CACHE_AUTH.toString(),
+        json.encode(model));
+  }
+
+  fetchAuth(String key) async {
+    return json.decode(_preferences!.getString(key) ?? _jsonString);
+  }
+
+  deleteAuth(model) async {
+    return await _preferences!.setString(
+        SharedPreferencesKeys.CACHE_AUTH.toString(), json.encode(model));
   }
 }

@@ -16,12 +16,10 @@ class StorageService extends BaseFirebaseStorage {
   @override
   Future<dynamic>? fetchDefaultProfilePic() async {
     final imagePath = storage.ref().child('profile_pic.png');
-    String url = await imagePath.getDownloadURL();
+    String? url = await imagePath.getDownloadURL();
 
-    if (url != null) {
-      LocalManagement.instance
-          .cacheString(SharedPreferencesKeys.DEFAULT_PROFILE, url);
-    }
+   await LocalManagement.instance
+        .cacheString(SharedPreferencesKeys.DEFAULT_PROFILE, url);
     return null;
   }
 }

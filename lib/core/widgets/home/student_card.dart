@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../riverpod/firebase_riverpod.dart';
 
 class StudentCard extends ConsumerWidget {
   const StudentCard({
@@ -15,17 +14,17 @@ class StudentCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Card(
       child: ListTile(
-        leading: FutureBuilder(
-          future: ref.read(authProvider).storage.fetchDefaultProfilePic(),
-          builder: (context, AsyncSnapshot snapshot) {
+        leading: Builder(
+          builder: (context) {
+            String url = userData['profilePicUrl'];
             return CircleAvatar(
               backgroundColor: Colors.transparent,
-              child: snapshot.data == null
-                  ? Text(userData['name'][0].toString().toUpperCase())
+              child: url.contains('https://') == false
+                  ? Text(userData['name'][0].toString().toString())
                   : CachedNetworkImage(
                       fit: BoxFit.cover,
                       useOldImageOnUrlChange: true,
-                      imageUrl: snapshot.data,
+                      imageUrl: userData['profilePicUrl'],
                     ),
             );
           },

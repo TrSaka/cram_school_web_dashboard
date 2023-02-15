@@ -5,11 +5,8 @@ import 'package:flutter_school/core/constants/app/app_constants.dart';
 import 'package:flutter_school/core/constants/app/global/global_keys.dart';
 import 'package:flutter_school/core/product/view_model/home/screens/student_view_model.dart';
 import 'package:flutter_school/core/widgets/global/text_forms.dart';
-import 'package:flutter_school/core/widgets/home/popup_button.dart';
 import '../../../models/student_model.dart';
-import '../../constants/enums/cache_enum.dart';
 import '../../riverpod/firebase_riverpod.dart';
-import '../../service/cache/locale_management.dart';
 import '../../utils/color/scheme_colors.dart';
 
 class StudentAddButtonWidget extends ConsumerWidget {
@@ -119,29 +116,34 @@ class StudentAddButtonWidget extends ConsumerWidget {
                             name: _viewModel.nameController.text,
                             lastName: _viewModel.lastNameController.text,
                             password: _viewModel.passWordController.text,
-                            profilePicUrl: LocalManagement.instance.fetchString(
-                                    SharedPreferencesKeys.DEFAULT_PROFILE) ??
-                                "null",
+                            profilePicUrl: AppConstants.DEFAULT_PROFILE_PICTURE,
                             cramSchoolID: 1402,
-                            userNumber: int.parse(_viewModel.numberController.text),
+                            userNumber:
+                                int.parse(_viewModel.numberController.text),
                           );
-                          try {
-                            ref.read(authProvider).auth.registerUser(
-                                  _viewModel.emailController.text,
-                                  model,
-                                );
-                            try {
-                              ref
-                                  .read(authProvider)
-                                  .database
-                                  .saveUserToDatabase(model);
-                              Navigator.pop(context);
-                            } catch (e) {
-                              rethrow;
+                          ref
+                              .read(authProvider)
+                              .checkNewUserID(model)!
+                              .then((ifIdIsAvailable) {
+                            if (ifIdIsAvailable == true) {
+                              try {
+                                ref.read(authProvider).registerUser(
+                                      _viewModel.emailController.text,
+                                      model,
+                                    );
+                                try {
+                                  ref.read(authProvider).saveUserData(model);
+                                  Navigator.pop(context);
+                                } catch (e) {
+                                  rethrow;
+                                }
+                              } catch (e) {
+                                rethrow;
+                              }
+                            } else {
+                              debugPrint("Wrong ID");
                             }
-                          } catch (e) {
-                            rethrow;
-                          }
+                          });
                         }
                       },
                     ),

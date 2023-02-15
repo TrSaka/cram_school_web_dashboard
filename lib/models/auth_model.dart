@@ -1,6 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:firebase/firebase.dart';
+
 class AuthModel {
   final int numberID;
   final String email;
@@ -39,10 +41,22 @@ class AuthModel {
     );
   }
 
-  String toJson() => json.encode(toMap());
+  // String toJson() => json.encode(toMap());
 
-  factory AuthModel.fromJson(String source) =>
-      AuthModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  Map<String, dynamic> toJson() {
+    return {
+      "numberID": numberID,
+      "email": email,
+      "password": password,
+    };
+  }
+
+  factory AuthModel.fromJson(Map<String, dynamic> parsedJson) {
+    return AuthModel(
+        numberID: parsedJson['numberID'] ?? '',
+        email: parsedJson['email'] ?? '',
+        password: parsedJson['password'] ?? '');
+  }
 
   @override
   String toString() =>
