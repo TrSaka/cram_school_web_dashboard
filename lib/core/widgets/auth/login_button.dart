@@ -79,7 +79,7 @@ class LoginButton extends ConsumerWidget {
 
                       default:
                         LocalManagement.instance
-                            .cacheAuth(model, rememberMeState);
+                            .cacheAuth(model, !rememberMeState);
                     }
 
                     NavRoute(const MenuRoute()).toPushReplecement(context);
