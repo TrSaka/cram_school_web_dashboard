@@ -8,7 +8,7 @@ import 'package:flutter_school/core/riverpod/firebase_riverpod.dart';
 import 'package:flutter_school/core/riverpod/remember_riverpod.dart';
 import 'package:flutter_school/core/service/cache/locale_management.dart';
 import 'package:flutter_school/core/utils/color/scheme_colors.dart';
-import 'package:flutter_school/models/user_model.dart';
+import 'package:flutter_school/models/auth_model.dart';
 import '../../product/router/router.dart';
 
 class LoginButton extends ConsumerWidget {
@@ -82,35 +82,6 @@ class LoginButton extends ConsumerWidget {
                       LocalManagement.instance.cacheInteger(
                           SharedPreferencesKeys.ID_KEY,
                           int.parse(idController.text));
-
-                      //if remember me is tick
-/*
-                      LocalManagement.cacheString(
-                          SharedPreferencesKeys.EMAIL_KEY,
-                          emailController.text);
-
-                      debugPrint("EMAIL SAVED");
-
-                      LocalManagement().cacheString(key, value);
-
-                      LocalManagement.fetchString(
-                                  SharedPreferencesKeys.PASSWORD_KEY) !=
-                              null
-                          ? LocalManagement.cacheString(
-                              SharedPreferencesKeys.PASSWORD_KEY,
-                              passwordController.text)
-                          : null;
-                      debugPrint("PASSWORD SAVED");
-
-                      LocalManagement.fetchInteger(
-                                  SharedPreferencesKeys.ID_KEY) !=
-                              null
-                          ? LocalManagement.cacheInteger(
-                              SharedPreferencesKeys.ID_KEY,
-                              int.parse(idController.text))
-                          : null;
-                      debugPrint("ID SAVED");
-                      */
                     }
 
                     NavRoute(const MenuRoute()).toPushReplecement(context);

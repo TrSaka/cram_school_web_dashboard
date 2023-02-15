@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_school/core/base/view/base_view.dart';
 import 'package:flutter_school/core/constants/app/app_constants.dart';
-import 'package:flutter_school/core/widgets/auth/text_forms.dart';
+import 'package:flutter_school/core/widgets/global/text_forms.dart';
 import '../../../base/state/base_state.dart';
 
 import '../../../widgets/auth/background_colors.dart';

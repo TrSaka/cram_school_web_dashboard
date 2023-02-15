@@ -5,4 +5,5 @@ enum SharedPreferencesKeys {
   ID_KEY,
   EMAIL_KEY,
   PASSWORD_KEY,
+  DEFAULT_PROFILE,
 } 

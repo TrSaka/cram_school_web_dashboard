@@ -1,9 +1,14 @@
 // ignore_for_file: prefer_conditional_assignment
 
+import 'dart:html';
+import 'dart:math';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_school/core/service/firebase/firestore/base_firestore_service.dart';
 
-import '../../../../models/user_model.dart';
+import '../../../../models/auth_model.dart';
+import '../../../../models/student_model.dart';
 
 class FirestoreService extends BaseFirestoreService {
   static FirestoreService? _instance;
@@ -28,6 +33,47 @@ class FirestoreService extends BaseFirestoreService {
       }
     } catch (e) {
       return false; //for errors
+    }
+  }
+
+  @override
+  Future getStudents(int idNumber) async {
+    List<dynamic> userList = [];
+
+    final userPath = database
+        .collection('CRAM SCHOOL')
+        .doc(idNumber.toString())
+        .collection('Users');
+
+    await userPath.get().then((value) => value.docs.forEach((element) {
+          print(element.data());
+
+          userList.add(element.data());
+        }));
+
+    return userList;
+  }
+
+  @override
+  Future saveUserToDatabase(StudentModel model) async {
+    final userPath = database
+        .collection('CRAM SCHOOL')
+        .doc(model.cramSchoolID.toString())
+        .collection('Users');
+
+    Map<String, dynamic> dataToSave = {
+      'name': model.name,
+      'lastName': model.lastName,
+      'password': model.password,
+      'cramSchoolID': model.cramSchoolID.toString(),
+      'profilePicUrl': model.profilePicUrl,
+      'userNumber': model.userNumber.toString(),
+    };
+    try {
+      final response = await userPath.add(dataToSave);
+      return response;
+    } catch (e) {
+      rethrow;
     }
   }
 }

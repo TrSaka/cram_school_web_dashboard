@@ -10,7 +10,6 @@ TextEditingController emailController = TextEditingController();
 TextEditingController passwordController = TextEditingController();
 
 abstract class _LoginViewModelBase with Store {
-  final formKey = GlobalKey<FormState>();
 
   //Password shadow lock settings
   @observable

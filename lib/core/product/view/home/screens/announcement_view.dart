@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_school/core/utils/color/scheme_colors.dart';
 
 class AnnouncementView extends StatefulWidget {
   const AnnouncementView({super.key});

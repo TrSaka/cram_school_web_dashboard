@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_school/core/product/view_model/auth/login_view_model.dart';
 import 'package:flutter_school/core/riverpod/remember_riverpod.dart';
-import 'package:flutter_school/core/widgets/auth/text_forms.dart';
+import 'package:flutter_school/core/widgets/global/text_forms.dart';
 import '../../utils/color/scheme_colors.dart';
 
 class RememberMeButton extends ConsumerWidget {

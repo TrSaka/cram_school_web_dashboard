@@ -8,6 +8,7 @@ class DefaultResponsiveSizes {
   getDeviceHeight() {
     MediaQuery.of(context).size.height;
   }
+  static const defaultResponsiveSizes = 16.0;
+  
 }
 // kolay gelsin kardeşim bende yemekteyim : ok
-

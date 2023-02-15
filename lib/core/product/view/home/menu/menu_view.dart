@@ -20,7 +20,7 @@ class _MenuViewState extends ConsumerState<MenuView> {
   @override
   Widget build(BuildContext context) {
     int pageNumber = ref.watch(pageChangeProvider);
-    
+
     return BaseView(
       viewModel: viewModel,
       onPageBuilder: (context, value) {
@@ -34,17 +34,7 @@ class _MenuViewState extends ConsumerState<MenuView> {
                 const Expanded(flex: 1, child: DrawerMenu()),
                 Expanded(
                   flex: 5,
-                  child: DashboardScreen(
-                    scaffold: Scaffold(
-                      body: Column(
-                        children: [
-                          const SizedBox(height: UIColors.defaultPadding / 2),
-                          const Header(),
-                          Expanded(child: viewModel.pages[pageNumber]),
-                        ],
-                      ),
-                    ),
-                  ),
+                  child: dashboardView(pageNumber),
                 ),
               ],
             ),
@@ -55,6 +45,20 @@ class _MenuViewState extends ConsumerState<MenuView> {
         viewModel.checkUserLoggedProtectUrl(ref, context);
         viewModel = model;
       },
+    );
+  }
+
+  DashboardScreen dashboardView(int pageNumber) {
+    return DashboardScreen(
+      scaffold: Scaffold(
+        body: Column(
+          children: [
+            const SizedBox(height: UIColors.defaultPadding / 2),
+            const Header(),
+            Expanded(child: viewModel.pages[pageNumber]),
+          ],
+        ),
+      ),
     );
   }
 }

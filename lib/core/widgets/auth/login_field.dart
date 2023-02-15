@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_school/core/widgets/auth/text_forms.dart';
+import 'package:flutter_school/core/constants/app/global/global_keys.dart';
+import 'package:flutter_school/core/widgets/global/text_forms.dart';
 import 'custom_divider.dart';
 import 'login_button.dart';
 import 'remember_me_button.dart';
@@ -38,7 +39,7 @@ class LoginFieldWidget extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(40),
                   child: Form(
-                    key: viewModel.formKey,
+                    key: formKey,
                     autovalidateMode: AutovalidateMode.always,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,

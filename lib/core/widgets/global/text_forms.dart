@@ -107,3 +107,29 @@ class CompanyForm extends StatelessWidget {
     );
   }
 }
+
+class AddUserFormFields extends StatelessWidget {
+  AddUserFormFields({
+    required this.text,
+    required this.validate,
+    required this.controller,
+    Key? key,
+  }) : super(key: key);
+  final String text;
+  String? Function(String?)? validate;
+  TextEditingController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextFormField(
+        controller: controller,
+        validator: validate,
+        decoration: InputDecoration(
+          labelText: text,
+        ),
+      ),
+    );
+  }
+}

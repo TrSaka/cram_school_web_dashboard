@@ -8,14 +8,15 @@ class Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        const ProfileCard(),
-        SizedBox(
-          width: UIColors.defaultPadding,
-        )
-      ],
+    return Container(
+      color: Theme.of(context).backgroundColor,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: const [
+          ProfileCard(),
+          SizedBox(width: UIColors.defaultPadding)
+        ],
+      ),
     );
   }
 }
@@ -27,18 +28,21 @@ class ProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(left: UIColors.defaultPadding),
-      padding: const EdgeInsets.symmetric(
-        horizontal: UIColors.defaultPadding,
-        vertical: UIColors.defaultPadding / 2,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: Container(
+        margin: const EdgeInsets.only(left: UIColors.defaultPadding),
+        padding: const EdgeInsets.symmetric(
+          horizontal: UIColors.defaultPadding,
+          vertical: UIColors.defaultPadding / 2,
+        ),
+        decoration: BoxDecoration(
+          color: Theme.of(context).primaryColor,
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+          border: Border.all(color: Colors.white10),
+        ),
+        child: drop(),
       ),
-      decoration: BoxDecoration(
-        color: Theme.of(context).primaryColor,
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
-        border: Border.all(color: Colors.white10),
-      ),
-      child: drop(),
     );
   }
 

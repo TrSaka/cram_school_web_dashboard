@@ -3,7 +3,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_school/core/service/firebase/auth/base_fireabase.dart';
-import 'package:flutter_school/models/user_model.dart';
+import 'package:flutter_school/models/auth_model.dart';
+
+import '../../../../models/student_model.dart';
 
 class AuthService extends BaseFirebaseService {
   static AuthService? _instance;
@@ -47,5 +49,17 @@ class AuthService extends BaseFirebaseService {
     } else {
       return true;
     }
+  }
+
+  @override
+  Future registerUser(String email, StudentModel model) async {
+    try {
+      var response = await auth.createUserWithEmailAndPassword(
+          email: email, password: model.password);
+      return response;
+    } catch (e) {
+      return null;
+    }
+    
   }
 }

@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_school/core/base/view/base_view.dart';
 import 'package:flutter_school/core/product/view_model/splash/splash_view_model.dart';
-import 'package:flutter_school/core/utils/color/scheme_colors.dart';
-
-import 'package:flutter_school/core/widgets/auth/text_forms.dart';
 
 class SplashView extends ConsumerStatefulWidget {
   const SplashView({super.key});
@@ -20,10 +17,10 @@ class _SplashViewState extends ConsumerState<SplashView> {
     return BaseView(
       viewModel: viewModel,
       onPageBuilder: (context, value) {
-        return const Scaffold(
+        return Scaffold(
           body: Center(
             child: CircularProgressIndicator(
-              color: UIColors.PRIMARY_COLOR,
+              color: Theme.of(context).primaryColor,
             ),
           ),
         );

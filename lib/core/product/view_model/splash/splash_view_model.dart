@@ -1,7 +1,9 @@
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobx/mobx.dart';
-import '../../../../models/user_model.dart';
+import '../../../../models/auth_model.dart';
 import '../../../constants/enums/cache_enum.dart';
 import '../../../riverpod/firebase_riverpod.dart';
 import '../../../service/cache/locale_management.dart';
