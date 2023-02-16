@@ -2,9 +2,11 @@
 
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_school/core/constants/enums/cache_enum.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../models/auth_model.dart';
 
 class LocalManagement {
   LocalManagement._init() {
@@ -13,8 +15,7 @@ class LocalManagement {
     });
   }
 
-  final _jsonString =
-      '{"status": false, "extra": null}';
+  final _jsonString = '{"status": false, "extra": null}';
 
   static final LocalManagement _instance = LocalManagement._init();
 
@@ -49,18 +50,31 @@ class LocalManagement {
 
   Future? cacheAuth(model, bool remembered) async {
     return await _preferences!.setString(
-        remembered == true
-            ? SharedPreferencesKeys.CACHE_AUTH.toString()
-            : SharedPreferencesKeys.HIDE_CACHE_AUTH.toString(),
-        json.encode(model));
+      remembered == true
+          ? SharedPreferencesKeys.CACHE_AUTH.toString()
+          : SharedPreferencesKeys.HIDE_CACHE_AUTH.toString(),
+      json.encode(model),
+    );
   }
 
-  fetchAuth(String key) async {
-    return json.decode(_preferences!.getString(key) ?? _jsonString);
+ fetchAuth(String key)  {
+    final data =  json.decode(_preferences!.getString(key) ?? _jsonString);
+
+    if (data['status'] != false) {
+      var authData = AuthModel.fromMap(data);
+
+      AuthModel userModel = AuthModel(
+        numberID: authData.numberID,
+        email: authData.email,
+        password: authData.password,
+      );
+      return userModel;
+    }
+    return null;
   }
 
-  deleteAuth(model) async {
-    return await _preferences!.setString(
-        SharedPreferencesKeys.CACHE_AUTH.toString(), json.encode(model));
+  deleteAuth(key) async {
+    return await _preferences!.remove(
+        SharedPreferencesKeys.CACHE_AUTH.toString());
   }
 }

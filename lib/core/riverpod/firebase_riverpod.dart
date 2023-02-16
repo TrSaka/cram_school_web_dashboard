@@ -42,8 +42,8 @@ class FirebaseProvider extends ChangeNotifier {
     }
   }
 
-  Future getUsers(int id) async {
-    return await _database.getStudents(id);
+  Future getUsers() async {
+    return await _database.getStudents();
   }
 
   Future saveUserData(StudentModel model) async {
@@ -56,6 +56,10 @@ class FirebaseProvider extends ChangeNotifier {
 
   Future? getDefaultProfilePicture() async {
     return await _storage.fetchDefaultProfilePic();
+  }
+
+  Future deleteUser(int index) async {
+    return await _database.deleteuser(index);
   }
 
   Future<bool> checkUser() async {

@@ -1,5 +1,8 @@
 // ignore_for_file: prefer_conditional_assignment
+
 import 'package:flutter/material.dart';
+import 'package:flutter_school/core/constants/enums/cache_enum.dart';
+import 'package:flutter_school/core/service/cache/locale_management.dart';
 import 'package:flutter_school/core/service/firebase/firestore/base_firestore_service.dart';
 import '../../../../models/auth_model.dart';
 import '../../../../models/student_model.dart';
@@ -13,13 +16,19 @@ class FirestoreService extends BaseFirestoreService {
 
   FirestoreService._init();
 
-  @override
-  Future getStudents(int idNumber) async {
-    List<dynamic> userList = [];
+  AuthModel returnAuthModel() {
+    return LocalManagement.instance
+        .fetchAuth(SharedPreferencesKeys.HIDE_CACHE_AUTH.toString());
+  }
 
+  @override
+  Future getStudents() async {
+    //if user in here data already saved:)
+    var model = returnAuthModel();
+    List<dynamic> userList = [];
     final userPath = database
         .collection('CRAM SCHOOL')
-        .doc(idNumber.toString())
+        .doc(model.numberID.toString())
         .collection('Users');
 
     await userPath.get().then((value) => value.docs.forEach((element) {
@@ -32,9 +41,10 @@ class FirestoreService extends BaseFirestoreService {
 
   @override
   Future saveUserToDatabase(StudentModel model) async {
+    var authModel = returnAuthModel();
     final userPath = database
         .collection('CRAM SCHOOL')
-        .doc(model.cramSchoolID.toString())
+        .doc(authModel.numberID.toString())
         .collection('Users');
 
     Map<String, dynamic> dataToSave = {
@@ -44,6 +54,7 @@ class FirestoreService extends BaseFirestoreService {
       'cramSchoolID': model.cramSchoolID.toString(),
       'profilePicUrl': model.profilePicUrl,
       'userNumber': model.userNumber.toString(),
+      'email': model.email,
     };
     try {
       final response = await userPath.add(dataToSave);
@@ -95,6 +106,7 @@ class FirestoreService extends BaseFirestoreService {
         .collection('Users');
     late StudentModel userModel;
     List userSchoolNumbers = [];
+
     try {
       final response = await adminUserPath.get().then(
             (value) => value.docs.forEach(
@@ -108,6 +120,7 @@ class FirestoreService extends BaseFirestoreService {
                   profilePicUrl: userData['profilePicUrl'],
                   userNumber: int.parse(userData['userNumber']),
                   cramSchoolID: int.parse(userData['cramSchoolID']),
+                  email: userData['email'],
                 );
                 userSchoolNumbers.add(userModel.userNumber);
               },
@@ -123,5 +136,27 @@ class FirestoreService extends BaseFirestoreService {
       debugPrint(e.toString());
       return true;
     }
+  }
+
+  @override
+  Future deleteuser(int index) async {
+    AuthModel userModel = returnAuthModel();
+
+    late String willdeleteDoc;
+
+    final path = database
+        .collection('CRAM SCHOOL')
+        .doc(userModel.numberID.toString())
+        .collection('Users');
+
+    //if user in here data already saved:)
+    await path.get().then((value) {
+      debugPrint(value.docs[index].id);
+      willdeleteDoc = value.docs[index].id;
+    });
+
+    return await path.doc(willdeleteDoc.toString()).delete().then(
+          (value) => debugPrint("User data deleted succesfully"),
+        );
   }
 }

@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, unnecessary_null_comparison
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
@@ -13,12 +14,16 @@ class StudentModel {
   final List? exams;
   final List? announcements;
   final int? userNumber;
+  final String? uid;
+  final String email;
   StudentModel({
     required this.name,
     required this.lastName,
     required this.password,
     required this.profilePicUrl,
     required this.cramSchoolID,
+    required this.email,
+    this.uid,
     this.exams,
     this.announcements,
     this.userNumber,
@@ -30,6 +35,8 @@ class StudentModel {
     String? password,
     String? profilePicUrl,
     int? cramSchoolID,
+    String? uid,
+    String? email,
     List? exams,
     List? announcements,
     int? userNumber,
@@ -41,6 +48,8 @@ class StudentModel {
       profilePicUrl: profilePicUrl ?? this.profilePicUrl,
       cramSchoolID: cramSchoolID ?? this.cramSchoolID,
       exams: exams ?? this.exams,
+      uid: uid ?? this.uid,
+      email: email ?? this.email,
       announcements: announcements ?? this.announcements,
       userNumber: userNumber ?? this.userNumber,
     );
@@ -54,6 +63,8 @@ class StudentModel {
       'profilePicUrl': profilePicUrl,
       'cramSchoolID': cramSchoolID,
       'exams': exams,
+      'uid': uid,
+      'email': email,
       'announcements': announcements,
       'userNumber': userNumber
     };
@@ -64,8 +75,10 @@ class StudentModel {
       name: map['name'] as String,
       lastName: map['lastName'] as String,
       password: map['password'] as String,
+      email: map['email'] as String,
       profilePicUrl: map['profilePicUrl'] as String,
       cramSchoolID: map['cramSchoolID'] as int,
+      uid: map['uid'] as String,
       exams: List.from((map['exams'] as List)),
       announcements: List.from((map['announcement'] as List)),
       userNumber: map['userNumber'] as int,
@@ -78,8 +91,10 @@ class StudentModel {
   ) {
     var document = snapshot.data();
     return StudentModel(
+      email: document?['email'],
       name: document?['name'],
       cramSchoolID: document?['cramSchoolID'],
+      uid: document?['uid'],
       lastName: document?['lastName'],
       password: document?['password'],
       profilePicUrl: document?['profilePicUrl'],
@@ -94,7 +109,7 @@ class StudentModel {
 
   @override
   String toString() {
-    return 'StudentModel(name: $name, lastName: $lastName, password: $password, profilePicUrl: $profilePicUrl, cramSchoolID: $cramSchoolID, exams: $exams, announcements: $announcements, userNumber: $userNumber)';
+    return 'StudentModel(name: $name, lastName: $lastName, password: $password, profilePicUrl: $profilePicUrl, cramSchoolID: $cramSchoolID, exams: $exams, announcements: $announcements, userNumber: $userNumber, uid: $uid, email: $email)';
   }
 
   @override
@@ -108,7 +123,9 @@ class StudentModel {
         other.cramSchoolID == cramSchoolID &&
         listEquals(other.exams, exams) &&
         listEquals(other.announcements, announcements) &&
-        other.userNumber == userNumber;
+        other.email == email &&
+        other.userNumber == userNumber &&
+        other.uid == uid;
   }
 
   @override
@@ -119,7 +136,9 @@ class StudentModel {
         profilePicUrl.hashCode ^
         cramSchoolID.hashCode ^
         exams.hashCode ^
+        email.hashCode ^
         announcements.hashCode ^
-        userNumber.hashCode;
+        userNumber.hashCode ^
+        uid.hashCode;
   }
 }

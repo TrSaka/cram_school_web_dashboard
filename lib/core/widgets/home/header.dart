@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_school/core/utils/color/scheme_colors.dart';
+
+import '../../utils/responsive/app_responsive_sizes.dart';
 
 class Header extends StatelessWidget {
   const Header({
@@ -14,7 +15,7 @@ class Header extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: const [
           ProfileCard(),
-          SizedBox(width: UIColors.defaultPadding)
+          SizedBox(width: DefaultResponsiveSizes.defaultResponsiveSizes)
         ],
       ),
     );
@@ -31,10 +32,11 @@ class ProfileCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: Container(
-        margin: const EdgeInsets.only(left: UIColors.defaultPadding),
+        margin: const EdgeInsets.only(
+            left: DefaultResponsiveSizes.defaultResponsiveSizes),
         padding: const EdgeInsets.symmetric(
-          horizontal: UIColors.defaultPadding,
-          vertical: UIColors.defaultPadding / 2,
+          horizontal: DefaultResponsiveSizes.defaultResponsiveSizes,
+          vertical: DefaultResponsiveSizes.defaultResponsiveSizes / 2,
         ),
         decoration: BoxDecoration(
           color: Theme.of(context).primaryColor,
@@ -50,8 +52,8 @@ class ProfileCard extends StatelessWidget {
     return Row(
       children: const [
         Padding(
-          padding:
-              EdgeInsets.symmetric(horizontal: UIColors.defaultPadding / 2),
+          padding: EdgeInsets.symmetric(
+              horizontal: DefaultResponsiveSizes.defaultResponsiveSizes / 2),
           child: Text(
             "Profile",
             style: TextStyle(

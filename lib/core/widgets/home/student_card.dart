@@ -1,17 +1,23 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_school/core/widgets/home/student_delete_popup_widget.dart';
 
 class StudentCard extends ConsumerWidget {
   const StudentCard({
     Key? key,
     required this.userData,
+    required this.index,
   }) : super(key: key);
 
   final userData;
+  final int index;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(
+    BuildContext context,
+    WidgetRef ref,
+  ) {
     return Card(
       child: ListTile(
         leading: Builder(
@@ -49,12 +55,7 @@ class StudentCard extends ConsumerWidget {
                     Icons.edit,
                     color: Colors.green,
                   )),
-              InkWell(
-                  onTap: (() {}),
-                  child: const Icon(
-                    Icons.delete,
-                    color: Colors.red,
-                  )),
+              StudentDeletePopUpWidget(index),
             ],
           ),
         ),

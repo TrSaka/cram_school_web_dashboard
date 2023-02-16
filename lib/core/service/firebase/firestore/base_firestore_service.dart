@@ -6,11 +6,16 @@ import 'package:flutter_school/models/student_model.dart';
 abstract class BaseFirestoreService {
   FirebaseFirestore database = FirebaseFirestore.instance;
 
+  
+
+
   Future<bool> checkNewStudentID(StudentModel model);
 
   Future saveUserToDatabase(StudentModel model);
 
   Future<bool> validateAdminAccount(AuthModel model);
 
-  Future getStudents(int idNumber);
+  Future getStudents();
+
+   Future deleteuser(int index);
 }

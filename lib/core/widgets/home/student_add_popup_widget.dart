@@ -3,14 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_school/core/constants/app/app_constants.dart';
 import 'package:flutter_school/core/constants/app/global/global_keys.dart';
+import 'package:flutter_school/core/constants/enums/cache_enum.dart';
 import 'package:flutter_school/core/product/view_model/home/screens/student_view_model.dart';
+import 'package:flutter_school/core/service/cache/locale_management.dart';
 import 'package:flutter_school/core/widgets/global/text_forms.dart';
+import 'package:flutter_school/models/auth_model.dart';
 import '../../../models/student_model.dart';
 import '../../riverpod/firebase_riverpod.dart';
-import '../../utils/color/scheme_colors.dart';
+
+import '../../utils/responsive/app_responsive_sizes.dart';
 
 class StudentAddButtonWidget extends ConsumerWidget {
-  StudentViewModel _viewModel = StudentViewModel();
+  final StudentViewModel _viewModel = StudentViewModel();
   StudentAddButtonWidget({
     Key? key,
   }) : super(key: key);
@@ -18,8 +22,8 @@ class StudentAddButtonWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
-      padding:
-          const EdgeInsets.symmetric(horizontal: UIColors.defaultPadding * 2),
+      padding: const EdgeInsets.symmetric(
+          horizontal: DefaultResponsiveSizes.defaultResponsiveSizes * 2),
       child: SizedBox(
         height: 30,
         width: 100,
@@ -39,26 +43,10 @@ class StudentAddButtonWidget extends ConsumerWidget {
                       autovalidateMode: AutovalidateMode.always,
                       child: Column(
                         children: [
-                          AddUserFormFields(
-                              text: "Öğrenci İsmi",
-                              validate: (p0) {
-                                if (p0!.isEmpty || p0.length < 2) {
-                                  return "Bu alan zorunlu";
-                                } else {
-                                  return null;
-                                }
-                              },
-                              controller: _viewModel.nameController),
-                          AddUserFormFields(
-                              text: "Öğrenci Soyad",
-                              validate: (p0) {
-                                if (p0!.isEmpty || p0.length < 2) {
-                                  return "Bu alan zorunlu";
-                                } else {
-                                  return null;
-                                }
-                              },
-                              controller: _viewModel.lastNameController),
+                          sameUserFormField(
+                              "Öğrenci İsmi", _viewModel.nameController),
+                          sameUserFormField(
+                              "Öğrenci Soyad", _viewModel.lastNameController),
                           AddUserFormFields(
                               text: "Öğrenci Numarası",
                               validate: (p0) {
@@ -86,6 +74,8 @@ class StudentAddButtonWidget extends ConsumerWidget {
                               validate: (p0) {
                                 if (p0!.isEmpty) {
                                   return "Bu alan zorunlu";
+                                } else if (p0.length < 5) {
+                                  return "Güçsüz şifre";
                                 }
                               },
                               controller: _viewModel.passWordController),
@@ -111,13 +101,17 @@ class StudentAddButtonWidget extends ConsumerWidget {
                       ),
                       onTap: () {
                         if (formKey.currentState?.validate() ?? false) {
+                          AuthModel authModel = LocalManagement.instance
+                              .fetchAuth(SharedPreferencesKeys.HIDE_CACHE_AUTH
+                                  .toString());
                           debugPrint("Validated");
                           var model = StudentModel(
                             name: _viewModel.nameController.text,
+                            email: _viewModel.emailController.text,
                             lastName: _viewModel.lastNameController.text,
                             password: _viewModel.passWordController.text,
                             profilePicUrl: AppConstants.DEFAULT_PROFILE_PICTURE,
-                            cramSchoolID: 1402,
+                            cramSchoolID: authModel.numberID,
                             userNumber:
                                 int.parse(_viewModel.numberController.text),
                           );
@@ -161,5 +155,19 @@ class StudentAddButtonWidget extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  AddUserFormFields sameUserFormField(
+      String text, TextEditingController controller) {
+    return AddUserFormFields(
+        text: text,
+        validate: (p0) {
+          if (p0!.isEmpty || p0.length < 2) {
+            return "Bu alan zorunlu";
+          } else {
+            return null;
+          }
+        },
+        controller: controller);
   }
 }

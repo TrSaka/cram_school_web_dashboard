@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_school/core/base/view/base_view.dart';
+import 'package:flutter_school/core/constants/enums/cache_enum.dart';
 import 'package:flutter_school/core/product/view_model/home/screens/student_view_model.dart';
 import 'package:flutter_school/core/riverpod/firebase_riverpod.dart';
-import '../../../../widgets/home/student_add_widget.dart';
+import 'package:flutter_school/core/service/cache/locale_management.dart';
+import 'package:flutter_school/core/utils/responsive/app_responsive_sizes.dart';
+import '../../../../widgets/home/student_add_popup_widget.dart';
 import '../../../../widgets/home/student_card.dart';
 
 class StudentsView extends ConsumerStatefulWidget {
@@ -24,49 +27,55 @@ class _StudentsViewState extends ConsumerState<StudentsView> {
       onPageBuilder: (context, value) {
         return Scaffold(
           appBar: AppBar(
+            automaticallyImplyLeading: false,
             elevation: 0,
             centerTitle: true,
             backgroundColor: Theme.of(context).primaryColor,
             title: const Text("Öğrencilerim"), //app bar title
-            actions: [
-              StudentAddButtonWidget(),
-            ],
+            actions: [StudentAddButtonWidget()],
           ),
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32.0),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    const SizedBox(height: 10),
-                    Expanded(
-                      child: FutureBuilder(
-                        future: ref.watch(authProvider).getUsers(1402),
-                        builder: (context, AsyncSnapshot snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const SizedBox();
-                          }
-                          if (snapshot.hasData) {
-                            return ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: snapshot.data.length,
-                              itemBuilder: (context, index) {
-                                return StudentCard(
-                                  userData: snapshot.data[index],
-                                );
-                              },
-                            );
-                          } else {
-                            return const Text("No Data");
-                          }
-                        },
+          body: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                  horizontal:
+                      DefaultResponsiveSizes.defaultResponsiveSizes * 2),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      const SizedBox(height: 10),
+                      Expanded(
+                        child: FutureBuilder(
+                          future: ref.watch(authProvider).getUsers(),
+                          builder: (context, AsyncSnapshot snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const SizedBox();
+                            }
+                            if (snapshot.hasData) {
+                              return ListView.builder(
+                                scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                itemCount: snapshot.data.length,
+                                itemBuilder: (context, index) {
+                                  return StudentCard(
+                                    userData: snapshot.data[index],
+                                    index: index,
+                                  );
+                                },
+                              );
+                            } else {
+                              return const Text("No Data");
+                            }
+                          },
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         );

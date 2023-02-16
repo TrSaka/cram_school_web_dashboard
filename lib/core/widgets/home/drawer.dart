@@ -3,10 +3,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_school/core/constants/enums/cache_enum.dart';
 import 'package:flutter_school/core/product/router/nav_route.dart';
 import 'package:flutter_school/core/product/router/router.dart';
 import 'package:flutter_school/core/product/view_model/home/menu/menu_view_model.dart';
+import 'package:flutter_school/core/service/cache/locale_management.dart';
 import 'package:flutter_school/core/utils/color/scheme_colors.dart';
+import 'package:flutter_school/core/widgets/home/drawer_listtile_widget.dart';
+
+import '../../utils/responsive/app_responsive_sizes.dart';
 
 class DrawerMenu extends ConsumerWidget {
   const DrawerMenu({
@@ -54,7 +59,8 @@ class DrawerMenu extends ConsumerWidget {
               press: () async {
                 viewModel.deleteRememberMeDataFromCache();
                 await FirebaseAuth.instance.signOut();
-                debugPrint("Signed out");
+                LocalManagement.instance
+                    .deleteAuth(SharedPreferencesKeys.CACHE_AUTH);
                 NavRoute(const LoginRoute()).toPushReplecement(context);
               },
             ),
@@ -66,35 +72,5 @@ class DrawerMenu extends ConsumerWidget {
 
   void changePage(WidgetRef ref, int number) {
     ref.read(pageChangeProvider.notifier).changeState(number);
-  }
-}
-
-class DrawerListTile extends StatelessWidget {
-  const DrawerListTile({
-    Key? key,
-    required this.title,
-    required this.press,
-    required this.iconData,
-  }) : super(key: key);
-
-  final String title;
-  final VoidCallback press;
-  final IconData iconData;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      onTap: press,
-      title: Row(
-        children: [
-          Icon(iconData, color: UIColors.bgColor),
-          const SizedBox(width: UIColors.defaultPadding),
-          Text(
-            title,
-            style: const TextStyle(color: Colors.white),
-          ),
-        ],
-      ),
-    );
   }
 }

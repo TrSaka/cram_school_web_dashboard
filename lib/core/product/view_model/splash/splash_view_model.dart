@@ -13,24 +13,16 @@ part 'splash_view_model.g.dart';
 class SplashViewModel = _SplashViewModelBase with _$SplashViewModel;
 
 abstract class _SplashViewModelBase with Store {
-  void validate(WidgetRef ref, BuildContext context) async {
-    late AuthModel authData;
-
-    var data = await LocalManagement.instance
+  void validate(WidgetRef ref, BuildContext context)  {
+    AuthModel? data =  LocalManagement.instance
         .fetchAuth(SharedPreferencesKeys.CACHE_AUTH.toString());
 
-    if (data['status'] != false) {
-      authData = AuthModel.fromMap(data);
-      AuthModel userModel = AuthModel(
-        numberID: authData.numberID,
-        email: authData.email,
-        password: authData.password,
-      );
+    if (data != null) {
       try {
-        ref.read(authProvider).validateAdmin(userModel)!.then((status) {
+        ref.read(authProvider).validateAdmin(data)!.then((status) {
           if (status == true) {
             try {
-              ref.read(authProvider).loginUser(userModel)?.then(
+              ref.read(authProvider).loginUser(data)?.then(
                     (value) =>
                         NavRoute(const MenuRoute()).toPushReplecement(context),
                   );

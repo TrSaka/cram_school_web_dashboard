@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_school/core/base/view/base_view.dart';
-import 'package:flutter_school/core/utils/color/scheme_colors.dart';
+import 'package:flutter_school/core/utils/responsive/app_responsive_sizes.dart';
 import 'package:flutter_school/core/widgets/home/header.dart';
 import '../../../../widgets/home/dashboard_screen.dart';
 import '../../../../widgets/home/drawer.dart';
@@ -53,7 +53,8 @@ class _MenuViewState extends ConsumerState<MenuView> {
       scaffold: Scaffold(
         body: Column(
           children: [
-            const SizedBox(height: UIColors.defaultPadding / 2),
+            const SizedBox(
+                height: DefaultResponsiveSizes.defaultResponsiveSizes / 2),
             const Header(),
             Expanded(child: viewModel.pages[pageNumber]),
           ],

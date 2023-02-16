@@ -14,5 +14,9 @@ abstract class BaseFirebaseService {
 
   bool checkUser();
 
+
+
+  Future deleteUser();
+
   bool isUserLogIn();
 }

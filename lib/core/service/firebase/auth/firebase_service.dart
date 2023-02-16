@@ -60,6 +60,14 @@ class AuthService extends BaseFirebaseService {
     } catch (e) {
       return null;
     }
-    
   }
+  
+  @override
+  Future deleteUser() {
+    // TODO: implement deleteUser
+    throw UnimplementedError();
+  }
+
+  
+
 }

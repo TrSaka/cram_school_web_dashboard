@@ -10,5 +10,5 @@ class UIColors {
 
   static const bgColor = Colors.white;
 
-  static const defaultPadding = 16.0;
+
 }

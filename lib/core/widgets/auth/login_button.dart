@@ -1,7 +1,6 @@
 // ignore_for_file: unused_local_variable
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_school/core/constants/enums/cache_enum.dart';
 import 'package:flutter_school/core/product/router/nav_route.dart';
 import 'package:flutter_school/core/product/view_model/auth/login_view_model.dart';
 import 'package:flutter_school/core/riverpod/firebase_riverpod.dart';
@@ -19,6 +18,7 @@ class LoginButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     bool rememberMeState = ref.watch(rememberMeProvider);
     final authNotifier = ref.watch(authProvider);
+
     LoginViewModel viewModel = LoginViewModel();
     return Column(
       children: [
@@ -50,7 +50,7 @@ class LoginButton extends ConsumerWidget {
               ),
             ),
           ),
-          onTap: () async {
+          onTap: () {
             AuthModel model = AuthModel(
                 numberID: int.parse(idController.text),
                 email: emailController.text,
@@ -59,14 +59,7 @@ class LoginButton extends ConsumerWidget {
             authNotifier.validateAdmin(model)!.then(
               (value) {
                 if (value == true) {
-                  return authNotifier
-                      .loginUser(
-                    AuthModel(
-                        numberID: int.parse(idController.text),
-                        email: emailController.text,
-                        password:
-                            passwordController.text), //run the login method
-                  )
+                  return authNotifier.loginUser(model) //run the login method
                       ?.then((value) {
                     switch (rememberMeState) {
                       case true:
@@ -78,10 +71,10 @@ class LoginButton extends ConsumerWidget {
                         break;
 
                       default:
-                        LocalManagement.instance
-                            .cacheAuth(model, !rememberMeState);
+                        
                     }
-
+                    LocalManagement.instance
+                            .cacheAuth(model, false);
                     NavRoute(const MenuRoute()).toPushReplecement(context);
                   });
                 }
@@ -92,9 +85,5 @@ class LoginButton extends ConsumerWidget {
         const SizedBox(height: 32),
       ],
     );
-  }
-
-  cacheValue(SharedPreferencesKeys key, var value) {
-    return LocalManagement.instance.cacheString(key, value);
   }
 }
