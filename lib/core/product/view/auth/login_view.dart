@@ -7,7 +7,7 @@ import '../../../base/state/base_state.dart';
 
 import '../../../widgets/auth/background_colors.dart';
 import '../../../widgets/auth/background_text.dart';
-import '../../../widgets/auth/copy_right.dart';
+import '../../../widgets/auth/copy_right_text_widget.dart';
 import '../../../widgets/auth/login_field.dart';
 
 import '../../view_model/auth/login_view_model.dart';

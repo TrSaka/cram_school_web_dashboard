@@ -1,4 +1,3 @@
-// ignore_for_file: must_be_immutable
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_school/core/constants/app/app_constants.dart';
@@ -7,11 +6,8 @@ import 'package:flutter_school/core/product/router/nav_route.dart';
 import 'package:flutter_school/core/product/view_model/home/screens/student_view_model.dart';
 import 'package:flutter_school/core/utils/responsive/app_responsive_sizes.dart';
 import 'package:flutter_school/core/widgets/global/text_forms.dart';
-import 'package:flutter_school/models/auth_model.dart';
 import '../../../models/student_model.dart';
-import '../../constants/enums/cache_enum.dart';
 import '../../riverpod/firebase_riverpod.dart';
-import '../../service/cache/locale_management.dart';
 
 class StudentAddPopUpButtonWidget extends ConsumerWidget {
   StudentAddPopUpButtonWidget(this.editMode, this.userModel, {super.key});
@@ -21,8 +17,6 @@ class StudentAddPopUpButtonWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AuthModel cachedAuthModel = LocalManagement.instance
-        .fetchAuth(SharedPreferencesKeys.HIDE_CACHE_AUTH.toString());
     return Padding(
       padding: EdgeInsets.symmetric(
           horizontal: editMode == false
@@ -34,12 +28,7 @@ class StudentAddPopUpButtonWidget extends ConsumerWidget {
         child: TextButton(
           onPressed: () async {
             if (editMode == true) {
-              _viewModel.emailController.text = userModel!.email;
-              _viewModel.passWordController.text = userModel!.password;
-              _viewModel.lastNameController.text = userModel!.lastName;
-              _viewModel.numberController.text =
-                  userModel!.userNumber.toString();
-              _viewModel.nameController.text = userModel!.name;
+              await _viewModel.fetchUserDataAndShowInFormField(userModel);
             }
             showDialog(
               context: context,
@@ -91,6 +80,7 @@ class StudentAddPopUpButtonWidget extends ConsumerWidget {
                                 } else if (p0.length < 5) {
                                   return "Güçsüz şifre";
                                 }
+                                return null;
                               },
                               controller: _viewModel.passWordController),
                         ],
@@ -117,7 +107,7 @@ class StudentAddPopUpButtonWidget extends ConsumerWidget {
                                   ),
                                   InkWell(
                                     child: actionButtons(
-                                        context, "Porfil Resmini Sıfırla"),
+                                        context, "Profil Resmini Sıfırla"),
                                     onTap: () {
                                       ref
                                           .read(authProvider)
@@ -132,10 +122,10 @@ class StudentAddPopUpButtonWidget extends ConsumerWidget {
                           onTap: () async {
                             if (formKey.currentState?.validate() ?? false) {
                               if (editMode == false) {
-                                //user add functions here
                                 debugPrint("Validated");
                                 StudentModel model =
-                                    convertForSave(cachedAuthModel);
+                                    _viewModel.convertModelForSave(
+                                        _viewModel.cachedAuthModel);
                                 ref
                                     .read(authProvider)
                                     .checkNewUserID(model)!
@@ -162,9 +152,20 @@ class StudentAddPopUpButtonWidget extends ConsumerWidget {
                                   }
                                 });
                               } else {
-                                await ref.read(authProvider).updateUserData(
-                                    convertForUpdate(cachedAuthModel), false);
-                                NavRoute(null).toPop(context);
+                                StudentModel convertedModel =
+                                    _viewModel.convertModelForUpdate(
+                                        _viewModel.cachedAuthModel, userModel);
+                                await ref
+                                    .read(authProvider)
+                                    .checkNewUserID(convertedModel)!
+                                    .then((editedUIDIsAvailable) {
+                                  if (editedUIDIsAvailable == true) {
+                                    ref
+                                        .read(authProvider)
+                                        .updateUserData(convertedModel, false);
+                                    NavRoute(null).toPop(context);
+                                  }
+                                });
                               }
                             }
                           },
@@ -188,17 +189,6 @@ class StudentAddPopUpButtonWidget extends ConsumerWidget {
     );
   }
 
-  StudentModel convertForUpdate(AuthModel cachedAuthModel) {
-    return StudentModel(
-      name: _viewModel.nameController.text,
-      userNumber: int.parse(_viewModel.numberController.text),
-      lastName: _viewModel.lastNameController.text,
-      password: userModel!.password, // can not be changed
-      cramSchoolID: cachedAuthModel.numberID, //admin's id
-      email: userModel!.email, //can not be changed
-    );
-  }
-
   Container saveButton(BuildContext context) {
     return Container(
       height: 40,
@@ -208,10 +198,7 @@ class StudentAddPopUpButtonWidget extends ConsumerWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       child: const Center(
-        child: Text(
-          "Kaydet",
-          style: TextStyle(color: Colors.white),
-        ),
+        child: Text("Kaydet", style: TextStyle(color: Colors.white)),
       ),
     );
   }
@@ -231,18 +218,6 @@ class StudentAddPopUpButtonWidget extends ConsumerWidget {
             text,
             style: const TextStyle(color: Colors.white),
           ))),
-    );
-  }
-
-  StudentModel convertForSave(AuthModel authModel) {
-    return StudentModel(
-      name: _viewModel.nameController.text,
-      email: _viewModel.emailController.text,
-      lastName: _viewModel.lastNameController.text,
-      password: _viewModel.passWordController.text,
-      profilePicUrl: AppConstants.DEFAULT_PROFILE_PICTURE,
-      cramSchoolID: authModel.numberID,
-      userNumber: int.parse(_viewModel.numberController.text),
     );
   }
 

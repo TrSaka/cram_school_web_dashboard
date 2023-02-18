@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_school/core/extensions/upper_case.dart';
 import 'package:flutter_school/core/widgets/home/edit_add_popup_widget.dart';
 import 'package:flutter_school/core/widgets/home/student_delete_popup_widget.dart';
-import 'package:flutter_school/models/student_model.dart';
+
+import '../../../models/student_model.dart';
 
 class StudentCard extends ConsumerWidget {
   const StudentCard({
@@ -12,7 +14,7 @@ class StudentCard extends ConsumerWidget {
     required this.index,
   }) : super(key: key);
 
-  final userData;
+  final StudentModel userData;
   final int index;
 
   @override
@@ -29,7 +31,7 @@ class StudentCard extends ConsumerWidget {
           child: ListTile(
             leading: Builder(
               builder: (context) {
-                String url = userData.profilePicUrl;
+                String url = userData.profilePicUrl!;
                 return circleProfilePic(url);
               },
             ),
@@ -37,7 +39,7 @@ class StudentCard extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "${userData.name.toString().toUpperCase()} ${userData.lastName.toString().toUpperCase()}",
+                  "${userData.name.toUpc} ${userData.lastName.toUpc}",
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Text(userData.userNumber.toString()),
@@ -65,8 +67,10 @@ class StudentCard extends ConsumerWidget {
     return CircleAvatar(
       backgroundColor: Colors.transparent,
       child: url.contains('https://') == false
-          ? Text(userData.name.toString())
+          ? Text(userData.name[0])
+          //if database storage gives error use native image for profile photo
           : CachedNetworkImage(
+          //else just load user's photo
               fit: BoxFit.cover,
               useOldImageOnUrlChange: true,
               imageUrl: url,

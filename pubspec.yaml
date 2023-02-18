@@ -56,9 +56,12 @@ dependencies:
   #ui properties
   google_fonts: ^4.0.3
   flutter_svg: ^1.1.6
+  #storage for database and pic url
   firebase_storage: ^11.0.11
+  #cached for load image without extra request
   cached_network_image: ^3.2.3
-  #database
+
+
   
 
 dev_dependencies:

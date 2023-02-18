@@ -67,7 +67,6 @@ class _StudentsViewState extends ConsumerState<StudentsView> {
                                       ConnectionState.waiting) {
                                     return const SizedBox();
                                   }
-
                                   return StudentCard(
                                     userData: StudentModel.fromMap(
                                         snapshot.data[index]),
