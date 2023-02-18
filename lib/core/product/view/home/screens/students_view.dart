@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_school/core/base/view/base_view.dart';
-import 'package:flutter_school/core/constants/enums/cache_enum.dart';
 import 'package:flutter_school/core/product/view_model/home/screens/student_view_model.dart';
 import 'package:flutter_school/core/riverpod/firebase_riverpod.dart';
-import 'package:flutter_school/core/service/cache/locale_management.dart';
 import 'package:flutter_school/core/utils/responsive/app_responsive_sizes.dart';
-import '../../../../widgets/home/student_add_popup_widget.dart';
+import '../../../../../models/student_model.dart';
+import '../../../../widgets/home/edit_add_popup_widget.dart';
 import '../../../../widgets/home/student_card.dart';
 
 class StudentsView extends ConsumerStatefulWidget {
@@ -32,7 +31,9 @@ class _StudentsViewState extends ConsumerState<StudentsView> {
             centerTitle: true,
             backgroundColor: Theme.of(context).primaryColor,
             title: const Text("Öğrencilerim"), //app bar title
-            actions: [StudentAddButtonWidget()],
+            actions: [
+              StudentAddPopUpButtonWidget(false, null),
+            ],
           ),
           body: SingleChildScrollView(
             scrollDirection: Axis.vertical,
@@ -48,7 +49,9 @@ class _StudentsViewState extends ConsumerState<StudentsView> {
                       const SizedBox(height: 10),
                       Expanded(
                         child: FutureBuilder(
-                          future: ref.watch(authProvider).getUsers(),
+                          future: ref
+                              .watch(authProvider)
+                              .getStudentsOrStudent(null, false),
                           builder: (context, AsyncSnapshot snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
@@ -60,8 +63,14 @@ class _StudentsViewState extends ConsumerState<StudentsView> {
                                 shrinkWrap: true,
                                 itemCount: snapshot.data.length,
                                 itemBuilder: (context, index) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const SizedBox();
+                                  }
+
                                   return StudentCard(
-                                    userData: snapshot.data[index],
+                                    userData: StudentModel.fromMap(
+                                        snapshot.data[index]),
                                     index: index,
                                   );
                                 },

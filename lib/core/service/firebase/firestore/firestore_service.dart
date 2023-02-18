@@ -1,6 +1,7 @@
-// ignore_for_file: prefer_conditional_assignment
-
+// ignore_for_file: prefer_conditional_assignment, avoid_function_literals_in_foreach_calls
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_school/core/constants/app/app_constants.dart';
 import 'package:flutter_school/core/constants/enums/cache_enum.dart';
 import 'package:flutter_school/core/service/cache/locale_management.dart';
 import 'package:flutter_school/core/service/firebase/firestore/base_firestore_service.dart';
@@ -16,36 +17,53 @@ class FirestoreService extends BaseFirestoreService {
 
   FirestoreService._init();
 
-  AuthModel returnAuthModel() {
+  AuthModel returnAuthCachedData() {
     return LocalManagement.instance
         .fetchAuth(SharedPreferencesKeys.HIDE_CACHE_AUTH.toString());
   }
 
-  @override
-  Future getStudents() async {
-    //if user in here data already saved:)
-    var model = returnAuthModel();
-    List<dynamic> userList = [];
-    final userPath = database
+  CollectionReference returnUsersPath(model) {
+    AuthModel cachedModel = returnAuthCachedData();
+    return database
         .collection('CRAM SCHOOL')
-        .doc(model.numberID.toString())
+        .doc(cachedModel.numberID.toString())
         .collection('Users');
+  }
 
-    await userPath.get().then((value) => value.docs.forEach((element) {
-          debugPrint(element.data().toString());
-          userList.add(element.data());
-        }));
+  @override
+  Future getStudentsOrStudent(
+      StudentModel? model, bool fetchSingleStudent) async {
+    var model = returnAuthCachedData();
+    late StudentModel selectedStudent;
+    List<dynamic> userList = [];
+    final userPath = returnUsersPath(model);
+    if (fetchSingleStudent == false) {
+      await userPath
+          .orderBy('name')
+          .get()
+          .then((value) => value.docs.forEach((element) {
+                debugPrint(element.data().toString());
+                userList.add(element.data());
+              }));
 
-    return userList;
+      return userList;
+    } else {
+      await userPath
+          .where('userNumber', isEqualTo: model.numberID.toString())
+          .get()
+          .then((value) {
+        value.docs.forEach((element) {
+          selectedStudent = StudentModel.fromMap(element.data());
+        });
+      });
+
+      return selectedStudent;
+    }
   }
 
   @override
   Future saveUserToDatabase(StudentModel model) async {
-    var authModel = returnAuthModel();
-    final userPath = database
-        .collection('CRAM SCHOOL')
-        .doc(authModel.numberID.toString())
-        .collection('Users');
+    final userPath = returnUsersPath(model);
 
     Map<String, dynamic> dataToSave = {
       'name': model.name,
@@ -100,28 +118,17 @@ class FirestoreService extends BaseFirestoreService {
 
   @override
   Future<bool> checkNewStudentID(StudentModel model) async {
-    final adminUserPath = database
-        .collection('CRAM SCHOOL')
-        .doc(model.cramSchoolID.toString())
-        .collection('Users');
+    final userPath = returnUsersPath(model);
     late StudentModel userModel;
     List userSchoolNumbers = [];
 
     try {
-      final response = await adminUserPath.get().then(
+      final response = await userPath.get().then(
             (value) => value.docs.forEach(
               (userData) {
                 debugPrint(userData.data().toString());
 
-                userModel = StudentModel(
-                  name: userData['name'],
-                  lastName: userData['lastName'],
-                  password: userData['password'],
-                  profilePicUrl: userData['profilePicUrl'],
-                  userNumber: int.parse(userData['userNumber']),
-                  cramSchoolID: int.parse(userData['cramSchoolID']),
-                  email: userData['email'],
-                );
+                userModel = convertToStudentModel(userData);
                 userSchoolNumbers.add(userModel.userNumber);
               },
             ),
@@ -138,25 +145,79 @@ class FirestoreService extends BaseFirestoreService {
     }
   }
 
+  StudentModel convertToStudentModel(userData) {
+    return StudentModel(
+      name: userData['name'],
+      lastName: userData['lastName'],
+      password: userData['password'],
+      profilePicUrl: userData['profilePicUrl'],
+      userNumber: int.parse(userData['userNumber']),
+      cramSchoolID: int.parse(userData['cramSchoolID']),
+      email: userData['email'],
+    );
+  }
+
   @override
-  Future deleteuser(int index) async {
-    AuthModel userModel = returnAuthModel();
+  Future getUserUidAndDeleteUserFromDatabase(StudentModel model) async {
+    late String willdeleteDocUID;
+    late String email;
+    late String password;
+    late var data;
 
-    late String willdeleteDoc;
+    List<String> userValues = [];
 
-    final path = database
-        .collection('CRAM SCHOOL')
-        .doc(userModel.numberID.toString())
-        .collection('Users');
+    final path = returnUsersPath(model);
 
     //if user in here data already saved:)
-    await path.get().then((value) {
-      debugPrint(value.docs[index].id);
-      willdeleteDoc = value.docs[index].id;
+    await path
+        .where('userNumber', isEqualTo: model.userNumber.toString())
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        willdeleteDocUID = element.id;
+        data = element.data();
+      });
+      email = data['email'];
+      password = data['password'];
     });
 
-    return await path.doc(willdeleteDoc.toString()).delete().then(
+    await path.doc(willdeleteDocUID).delete().then(
           (value) => debugPrint("User data deleted succesfully"),
         );
+
+    userValues = [email, password];
+
+    return userValues;
+  }
+
+  @override
+  Future updateUserData(StudentModel model, bool resetProfilePicUrl) async {
+    AuthModel cachedAuthModel = returnAuthCachedData();
+    var currentDocument;
+    final path = returnUsersPath(model);
+
+    final getByUserNumber = database
+        .collection('CRAM SCHOOL')
+        .doc(cachedAuthModel.numberID.toString())
+        .collection('Users')
+        .where('userNumber', isEqualTo: model.userNumber.toString())
+        .get();
+
+    await getByUserNumber.then((value) {
+      value.docs.forEach((element) {
+        currentDocument = element.id;
+      });
+    });
+    if (resetProfilePicUrl == false) {
+      return await path.doc(currentDocument).update({
+        'name': model.name,
+        'lastName': model.lastName,
+        'userNumber': model.userNumber,
+      });
+    } else {
+      return await path.doc(currentDocument).update({
+        'profilePicUrl': AppConstants.DEFAULT_PROFILE_PICTURE,
+      });
+    }
   }
 }

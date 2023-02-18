@@ -1,10 +1,8 @@
 // ignore_for_file: unnecessary_null_comparison, prefer_conditional_assignment
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_school/core/service/firebase/auth/base_fireabase.dart';
 import 'package:flutter_school/models/auth_model.dart';
-
 import '../../../../models/student_model.dart';
 
 class AuthService extends BaseFirebaseService {
@@ -61,13 +59,41 @@ class AuthService extends BaseFirebaseService {
       return null;
     }
   }
-  
+
   @override
-  Future deleteUser() {
-    // TODO: implement deleteUser
-    throw UnimplementedError();
+  Future deleteUserFromAuth(List userValue) async {
+    try {
+      User? user = auth.currentUser;
+      //email password
+
+      AuthCredential credentials = EmailAuthProvider.credential(
+          email: userValue[0], password: userValue[1]);
+
+      var result = await user!.reauthenticateWithCredential(credentials);
+
+      return await result.user!.delete();
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
-  
+  @override
+  String getAdminUid() {
+    User? user = auth.currentUser;
 
+    String data = user!.uid;
+    debugPrint(data);
+    return data;
+  }
+
+  @override
+  Future sendResetEmail(StudentModel model) async {
+    final response = await auth.sendPasswordResetEmail(email: model.email);
+    try {
+      return response;
+    } catch (e) {
+      
+      debugPrint(e.toString());rethrow;
+    }
+  }
 }

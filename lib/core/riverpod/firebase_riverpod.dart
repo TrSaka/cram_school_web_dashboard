@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_school/core/service/firebase/auth/firebase_service.dart';
@@ -12,12 +12,11 @@ class FirebaseProvider extends ChangeNotifier {
   bool _isLoading = false;
   UserCredential? _userCredential;
 
-  AuthService _auth = AuthService.instance!; //from repo
-  FirestoreService _database = FirestoreService.instance!; //from repo
-  StorageService _storage = StorageService.instance!; //from repo
+  final AuthService _auth = AuthService.instance!; //from repo
+  final FirestoreService _database = FirestoreService.instance!; //from repo
+  final StorageService _storage = StorageService.instance!; //from repo
 
   bool get isLoading => _isLoading;
-  UserCredential? get _userCredentinal => _userCredential;
 
   Future<UserCredential>? loginUser(AuthModel model) async {
     _userCredential = await _auth.signInMethod(model);
@@ -42,8 +41,10 @@ class FirebaseProvider extends ChangeNotifier {
     }
   }
 
-  Future getUsers() async {
-    return await _database.getStudents();
+  Future getStudentsOrStudent(
+      StudentModel? model, bool fetchSingleStudent) async {
+    return await _database.getStudentsOrStudent(model, fetchSingleStudent);
+    //give index to 0 for fetch all students
   }
 
   Future saveUserData(StudentModel model) async {
@@ -58,13 +59,29 @@ class FirebaseProvider extends ChangeNotifier {
     return await _storage.fetchDefaultProfilePic();
   }
 
-  Future deleteUser(int index) async {
-    return await _database.deleteuser(index);
+  Future sendResetEmail(StudentModel model) async {
+    return await _auth.sendResetEmail(model);
+  }
+
+  Future deleteUserFromDatabase(StudentModel model) async {
+    return await _database.getUserUidAndDeleteUserFromDatabase(model);
+  }
+
+  Future updateUserData(StudentModel model,bool resetProfilePicUrl) async {
+    return await _database.updateUserData(model,resetProfilePicUrl);
+  }
+
+  Future deleteUserFromAuth(userData) async {
+    return await _auth.deleteUserFromAuth(userData);
   }
 
   Future<bool> checkUser() async {
     bool? state = _auth.checkUser();
     return state;
+  }
+
+  String getAdminUserUid() {
+    return _auth.getAdminUid();
   }
 
   setLoader(loader) {

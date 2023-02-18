@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_school/core/widgets/home/edit_add_popup_widget.dart';
 import 'package:flutter_school/core/widgets/home/student_delete_popup_widget.dart';
+import 'package:flutter_school/models/student_model.dart';
 
 class StudentCard extends ConsumerWidget {
   const StudentCard({
@@ -18,59 +20,57 @@ class StudentCard extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
   ) {
-    return Card(
-      child: ListTile(
-        leading: Builder(
-          builder: (context) {
-            String url = userData['profilePicUrl'];
-            return CircleAvatar(
-              backgroundColor: Colors.transparent,
-              child: url.contains('https://') == false
-                  ? Text(userData['name'][0].toString().toString())
-                  : CachedNetworkImage(
-                      fit: BoxFit.cover,
-                      useOldImageOnUrlChange: true,
-                      imageUrl: userData['profilePicUrl'],
-                    ),
-            );
-          },
-        ),
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "${userData['name'].toString().toUpperCase()} ${userData['lastName'].toString().toUpperCase()}",
-              style: const TextStyle(fontWeight: FontWeight.bold),
+    // StudentModel userModel = StudentModel.fromMap(userData);
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: SizedBox(
+        width: double.infinity,
+        child: Card(
+          child: ListTile(
+            leading: Builder(
+              builder: (context) {
+                String url = userData.profilePicUrl;
+                return circleProfilePic(url);
+              },
             ),
-            Text(userData['userNumber'] ?? 0),
-          ],
-        ),
-        trailing: SizedBox(
-          width: 70,
-          child: Row(
-            children: [
-              InkWell(
-                  onTap: () {},
-                  child: const Icon(
-                    Icons.edit,
-                    color: Colors.green,
-                  )),
-              StudentDeletePopUpWidget(index),
-            ],
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "${userData.name.toString().toUpperCase()} ${userData.lastName.toString().toUpperCase()}",
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text(userData.userNumber.toString()),
+              ],
+            ),
+            trailing: SizedBox(
+              width: 150,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  StudentAddPopUpButtonWidget(true, userData),
+                  StudentDeletePopUpWidget(userData),
+                  const SizedBox(width: 20),
+                ],
+              ),
+            ),
           ),
         ),
       ),
     );
   }
-}
 
-CircleAvatar circle(int index, userData) {
-  return CircleAvatar(
-    backgroundColor: index % 2 == 0 ? Colors.deepPurpleAccent : Colors.purple,
-    foregroundColor: Colors.white,
-    child: Text(
-      userData['name'][0].toString().toUpperCase(), //takes first
-      style: const TextStyle(fontWeight: FontWeight.bold),
-    ),
-  );
+  CircleAvatar circleProfilePic(String url) {
+    return CircleAvatar(
+      backgroundColor: Colors.transparent,
+      child: url.contains('https://') == false
+          ? Text(userData.name.toString())
+          : CachedNetworkImage(
+              fit: BoxFit.cover,
+              useOldImageOnUrlChange: true,
+              imageUrl: url,
+            ),
+    );
+  }
 }

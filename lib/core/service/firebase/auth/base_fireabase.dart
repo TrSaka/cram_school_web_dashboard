@@ -14,9 +14,11 @@ abstract class BaseFirebaseService {
 
   bool checkUser();
 
+  String getAdminUid();
 
-
-  Future deleteUser();
+  Future deleteUserFromAuth(List userValue);
 
   bool isUserLogIn();
+
+  Future sendResetEmail(StudentModel model);
 }

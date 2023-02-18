@@ -71,10 +71,10 @@ class LoginButton extends ConsumerWidget {
                         break;
 
                       default:
-                        
                     }
-                    LocalManagement.instance
-                            .cacheAuth(model, false);
+                    LocalManagement.instance.cacheAuth(model, false);
+
+                    ref.read(authProvider).getAdminUserUid();
                     NavRoute(const MenuRoute()).toPushReplecement(context);
                   });
                 }

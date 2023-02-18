@@ -1,7 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, unnecessary_null_comparison
 import 'dart:convert';
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
@@ -9,7 +7,7 @@ class StudentModel {
   final String name;
   final String lastName;
   final String password;
-  final String profilePicUrl;
+  final String? profilePicUrl;
   final int cramSchoolID;
   final List? exams;
   final List? announcements;
@@ -20,7 +18,7 @@ class StudentModel {
     required this.name,
     required this.lastName,
     required this.password,
-    required this.profilePicUrl,
+     this.profilePicUrl,
     required this.cramSchoolID,
     required this.email,
     this.uid,
@@ -70,18 +68,15 @@ class StudentModel {
     };
   }
 
-  factory StudentModel.fromMap(Map<String, dynamic> map) {
+  factory StudentModel.fromMap(map) {
     return StudentModel(
-      name: map['name'] as String,
-      lastName: map['lastName'] as String,
-      password: map['password'] as String,
-      email: map['email'] as String,
-      profilePicUrl: map['profilePicUrl'] as String,
-      cramSchoolID: map['cramSchoolID'] as int,
-      uid: map['uid'] as String,
-      exams: List.from((map['exams'] as List)),
-      announcements: List.from((map['announcement'] as List)),
-      userNumber: map['userNumber'] as int,
+      name: map['name'],
+      lastName: map['lastName'],
+      password: map['password'],
+      email: map['email'],
+      profilePicUrl: map['profilePicUrl'],
+      cramSchoolID: int.parse(map['cramSchoolID']),
+      userNumber: int.parse(map['userNumber']),
     );
   }
 

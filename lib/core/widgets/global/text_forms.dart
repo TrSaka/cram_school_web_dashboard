@@ -115,9 +115,10 @@ class AddUserFormFields extends StatelessWidget {
     required this.text,
     required this.validate,
     required this.controller,
-    Key? key,
+    Key? key,  this.disableType,
   }) : super(key: key);
   final String text;
+  final bool? disableType;
   String? Function(String?)? validate;
   TextEditingController controller;
 
@@ -126,6 +127,7 @@ class AddUserFormFields extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
+        enabled:disableType??true,
         controller: controller,
         validator: validate,
         decoration: InputDecoration(
