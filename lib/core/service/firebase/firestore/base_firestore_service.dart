@@ -18,5 +18,5 @@ abstract class BaseFirestoreService {
 
   Future getUserUidAndDeleteUserFromDatabase(StudentModel model);
 
-  Future updateUserData(StudentModel model,bool resetProfilePicUrl);
+  Future updateUserData(StudentModel model,bool resetProfilePicUrl,int oldNumberID);
 }

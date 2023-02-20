@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_school/core/widgets/home/search_bar.dart';
 import '../../utils/responsive/app_responsive_sizes.dart';
+import 'dropdown_widget.dart';
 
 class Header extends StatelessWidget {
   const Header({
@@ -9,63 +10,34 @@ class Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return Container(
       color: Theme.of(context).backgroundColor,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: const [
-          ProfileCard(),
-          SizedBox(width: DefaultResponsiveSizes.defaultResponsiveSizes)
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const SizedBox(
+                  width: DefaultResponsiveSizes.defaultResponsiveSizes * 2),
+              const SearchField(),
+              Padding(
+                padding: const EdgeInsets.only(
+                    right: DefaultResponsiveSizes.defaultResponsiveSizes * 2),
+                child: Visibility(
+                  visible: width < 600 ? false : true,
+                  child: const SizedBox(
+                    height: 50,
+                    width: 50,
+                    child: DropDownButton(),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: DefaultResponsiveSizes.defaultResponsiveSizes),
         ],
       ),
-    );
-  }
-}
-
-class ProfileCard extends StatelessWidget {
-  const ProfileCard({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: Container(
-        margin: const EdgeInsets.only(
-            left: DefaultResponsiveSizes.defaultResponsiveSizes),
-        padding: const EdgeInsets.symmetric(
-          horizontal: DefaultResponsiveSizes.defaultResponsiveSizes,
-          vertical: DefaultResponsiveSizes.defaultResponsiveSizes / 2,
-        ),
-        decoration: BoxDecoration(
-          color: Theme.of(context).primaryColor,
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
-          border: Border.all(color: Colors.white10),
-        ),
-        child: drop(),
-      ),
-    );
-  }
-
-  Row drop() {
-    return Row(
-      children: const [
-        Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: DefaultResponsiveSizes.defaultResponsiveSizes / 2),
-          child: Text(
-            "Profile",
-            style: TextStyle(
-              color: Colors.white,
-            ),
-          ),
-        ),
-        Icon(
-          Icons.keyboard_arrow_down,
-          color: Colors.white,
-        ),
-      ],
     );
   }
 }

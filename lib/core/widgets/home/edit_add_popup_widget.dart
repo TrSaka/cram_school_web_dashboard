@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_school/core/constants/app/app_constants.dart';
@@ -72,6 +74,7 @@ class StudentAddPopUpButtonWidget extends ConsumerWidget {
                               },
                               controller: _viewModel.emailController),
                           AddUserFormFields(
+                              hide: editMode,
                               disableType: !editMode,
                               text: "Şifre",
                               validate: (p0) {
@@ -98,8 +101,8 @@ class StudentAddPopUpButtonWidget extends ConsumerWidget {
                                   InkWell(
                                     child: actionButtons(
                                         context, "Şifre Sıfırlama Emaili"),
-                                    onTap: () {
-                                      ref
+                                    onTap: () async {
+                                      await ref
                                           .read(authProvider)
                                           .sendResetEmail(userModel!);
                                       NavRoute(null).toPop(context);
@@ -109,9 +112,10 @@ class StudentAddPopUpButtonWidget extends ConsumerWidget {
                                     child: actionButtons(
                                         context, "Profil Resmini Sıfırla"),
                                     onTap: () {
-                                      ref
-                                          .read(authProvider)
-                                          .updateUserData(userModel!, true);
+                                      ref.read(authProvider).updateUserData(
+                                          userModel!,
+                                          true,
+                                          userModel!.userNumber!);
                                       NavRoute(null).toPop(context);
                                     },
                                   ),
@@ -155,14 +159,19 @@ class StudentAddPopUpButtonWidget extends ConsumerWidget {
                                 StudentModel convertedModel =
                                     _viewModel.convertModelForUpdate(
                                         _viewModel.cachedAuthModel, userModel);
-                                await ref
+                                ref
                                     .read(authProvider)
                                     .checkNewUserID(convertedModel)!
                                     .then((editedUIDIsAvailable) {
                                   if (editedUIDIsAvailable == true) {
-                                    ref
-                                        .read(authProvider)
-                                        .updateUserData(convertedModel, false);
+                                    try {
+                                      ref.read(authProvider).updateUserData(
+                                          convertedModel,
+                                          false,
+                                          userModel!.userNumber!);
+                                    } catch (e) {
+                                      debugPrint(e.toString());
+                                    }
                                     NavRoute(null).toPop(context);
                                   }
                                 });

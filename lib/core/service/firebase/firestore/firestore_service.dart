@@ -90,7 +90,7 @@ class FirestoreService extends BaseFirestoreService {
     List<AuthModel> accounts = [];
 
     try {
-      final response = await adminUserPath.get().then(
+      await adminUserPath.get().then(
             (value) => value.docs.forEach(
               (userData) {
                 debugPrint(userData.data().toString());
@@ -123,7 +123,7 @@ class FirestoreService extends BaseFirestoreService {
     List userSchoolNumbers = [];
 
     try {
-      final response = await userPath.get().then(
+      await userPath.get().then(
             (value) => value.docs.forEach(
               (userData) {
                 debugPrint(userData.data().toString());
@@ -191,8 +191,10 @@ class FirestoreService extends BaseFirestoreService {
   }
 
   @override
-  Future updateUserData(StudentModel model, bool resetProfilePicUrl) async {
+  Future updateUserData(
+      StudentModel model, bool resetProfilePicUrl, int oldNumberID) async {
     AuthModel cachedAuthModel = returnAuthCachedData();
+
     var currentDocument;
     final path = returnUsersPath(model);
 
@@ -200,7 +202,7 @@ class FirestoreService extends BaseFirestoreService {
         .collection('CRAM SCHOOL')
         .doc(cachedAuthModel.numberID.toString())
         .collection('Users')
-        .where('userNumber', isEqualTo: model.userNumber.toString())
+        .where('userNumber', isEqualTo: oldNumberID.toString())
         .get();
 
     await getByUserNumber.then((value) {
@@ -212,7 +214,7 @@ class FirestoreService extends BaseFirestoreService {
       return await path.doc(currentDocument).update({
         'name': model.name,
         'lastName': model.lastName,
-        'userNumber': model.userNumber,
+        'userNumber': model.userNumber.toString(),
       });
     } else {
       return await path.doc(currentDocument).update({

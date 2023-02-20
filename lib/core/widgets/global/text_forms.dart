@@ -5,7 +5,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_school/core/constants/app/app_constants.dart';
 import '../../product/view_model/auth/login_view_model.dart';
 
-LoginViewModel viewModel = LoginViewModel();
+LoginViewModel _viewModel = LoginViewModel();
 
 class PasswordForm extends StatelessWidget {
   const PasswordForm({
@@ -27,16 +27,16 @@ class PasswordForm extends StatelessWidget {
                   return "Bu alan zorunlu";
                 }
               },
-              obscureText: viewModel.lockState,
+              obscureText: _viewModel.lockState,
               decoration: InputDecoration(
                 hintText: 'Password',
                 labelText: 'Password',
                 suffixIcon: IconButton(
                   onPressed: () {
-                    viewModel.changeLockState();
+                    _viewModel.changeLockState();
                   },
                   icon: Icon(
-                    viewModel.lockState == false
+                    _viewModel.lockState == false
                         ? Icons.lock_open_rounded
                         : Icons.lock,
                   ),
@@ -115,10 +115,13 @@ class AddUserFormFields extends StatelessWidget {
     required this.text,
     required this.validate,
     required this.controller,
-    Key? key,  this.disableType,
+    this.hide,
+    Key? key,
+    this.disableType,
   }) : super(key: key);
   final String text;
   final bool? disableType;
+  final bool? hide;
   String? Function(String?)? validate;
   TextEditingController controller;
 
@@ -127,7 +130,8 @@ class AddUserFormFields extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
-        enabled:disableType??true,
+        obscureText: hide ?? false,
+        enabled: disableType ?? true,
         controller: controller,
         validator: validate,
         decoration: InputDecoration(

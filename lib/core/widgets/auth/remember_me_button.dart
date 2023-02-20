@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_school/core/product/view_model/auth/login_view_model.dart';
 import 'package:flutter_school/core/riverpod/remember_riverpod.dart';
-import 'package:flutter_school/core/widgets/global/text_forms.dart';
 import '../../utils/color/scheme_colors.dart';
 
 class RememberMeButton extends ConsumerWidget {
@@ -12,6 +12,7 @@ class RememberMeButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    LoginViewModel _viewModel = LoginViewModel();
     return SizedBox(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -20,10 +21,10 @@ class RememberMeButton extends ConsumerWidget {
           Observer(builder: (_) {
             return IconButton(
               onPressed: () {
-                viewModel.changeRememberMeBoxState();
+                _viewModel.changeRememberMeBoxState();
                 ref.read(rememberMeProvider.notifier).changeState();
               },
-              icon: viewModel.rememberMeCheckBoxState == false
+              icon: _viewModel.rememberMeCheckBoxState == false
                   ? const Icon(
                       Icons.check_box_outline_blank_rounded,
                       color: UIColors.COLOR_GREY,

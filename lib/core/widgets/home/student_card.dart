@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_school/core/extensions/upper_case.dart';
+import 'package:flutter_school/core/extensions/case_extension.dart';
 import 'package:flutter_school/core/widgets/home/edit_add_popup_widget.dart';
 import 'package:flutter_school/core/widgets/home/student_delete_popup_widget.dart';
 

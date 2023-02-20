@@ -29,7 +29,7 @@ class _LoginViewState extends BaseState<LoginView> {
   Widget build(BuildContext context) {
     return BaseView<LoginViewModel>(
         onDispose: () {
-          viewModel.clearControllers();
+          _viewModel.clearControllers();
         },
         onModelReady: (model) => _viewModel = model,
         viewModel: LoginViewModel(),

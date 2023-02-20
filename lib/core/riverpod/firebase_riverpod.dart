@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_school/core/service/firebase/auth/firebase_service.dart';
@@ -67,12 +66,18 @@ class FirebaseProvider extends ChangeNotifier {
     return await _database.getUserUidAndDeleteUserFromDatabase(model);
   }
 
-  Future updateUserData(StudentModel model,bool resetProfilePicUrl) async {
-    return await _database.updateUserData(model,resetProfilePicUrl);
+  Future updateUserData(
+      StudentModel model, bool resetProfilePicUrl, int oldNumberID) async {
+    return await _database.updateUserData(
+        model, resetProfilePicUrl, oldNumberID);
   }
 
   Future deleteUserFromAuth(userData) async {
     return await _auth.deleteUserFromAuth(userData);
+  }
+
+  Future signOut() async {
+    return await _auth.signOutMethod();
   }
 
   Future<bool> checkUser() async {

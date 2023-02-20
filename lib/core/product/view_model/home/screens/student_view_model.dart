@@ -1,6 +1,6 @@
+// ignore_for_file: library_private_types_in_public_api
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
-
 import '../../../../../models/auth_model.dart';
 import '../../../../../models/student_model.dart';
 import '../../../../constants/app/app_constants.dart';
@@ -32,6 +32,8 @@ abstract class _StudentViewModelBase with Store {
       email: userModel!.email, //can not be changed
     );
   }
+  
+  
 
   StudentModel convertModelForSave(AuthModel authModel) {
     return StudentModel(

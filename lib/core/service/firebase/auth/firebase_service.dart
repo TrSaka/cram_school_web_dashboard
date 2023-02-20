@@ -36,8 +36,8 @@ class AuthService extends BaseFirebaseService {
   }
 
   @override
-  Future signOutMethod() {
-    return auth.signOut();
+  Future signOutMethod()async {
+    return await auth.signOut();
   }
 
   @override
