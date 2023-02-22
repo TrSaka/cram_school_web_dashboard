@@ -22,7 +22,7 @@ class FirestoreService extends BaseFirestoreService {
         .fetchAuth(SharedPreferencesKeys.HIDE_CACHE_AUTH.toString());
   }
 
-  CollectionReference returnUsersPath(model) {
+  CollectionReference returnUsersPath() {
     AuthModel cachedModel = returnAuthCachedData();
     return database
         .collection('CRAM SCHOOL')
@@ -34,16 +34,16 @@ class FirestoreService extends BaseFirestoreService {
   Future getStudentsOrStudent(
       StudentModel? model, bool fetchSingleStudent) async {
     var model = returnAuthCachedData();
-    late StudentModel selectedStudent;
-    List<dynamic> userList = [];
-    final userPath = returnUsersPath(model);
+    StudentModel? selectedStudent;
+    List<StudentModel> userList = [];
+    final userPath = returnUsersPath();
+
     if (fetchSingleStudent == false) {
       await userPath
           .orderBy('name')
           .get()
           .then((value) => value.docs.forEach((element) {
-                debugPrint(element.data().toString());
-                userList.add(element.data());
+                userList.add(convertToStudentModel(element.data()));
               }));
 
       return userList;
@@ -63,7 +63,7 @@ class FirestoreService extends BaseFirestoreService {
 
   @override
   Future saveUserToDatabase(StudentModel model) async {
-    final userPath = returnUsersPath(model);
+    final userPath = returnUsersPath();
 
     Map<String, dynamic> dataToSave = {
       'name': model.name,
@@ -74,8 +74,11 @@ class FirestoreService extends BaseFirestoreService {
       'userNumber': model.userNumber.toString(),
       'email': model.email,
     };
+
     try {
       final response = await userPath.add(dataToSave);
+      userPath.doc(response.id).collection("exams").doc("userExamList");
+
       return response;
     } catch (e) {
       rethrow;
@@ -118,7 +121,7 @@ class FirestoreService extends BaseFirestoreService {
 
   @override
   Future<bool> checkNewStudentID(StudentModel model) async {
-    final userPath = returnUsersPath(model);
+    final userPath = returnUsersPath();
     late StudentModel userModel;
     List userSchoolNumbers = [];
 
@@ -166,7 +169,7 @@ class FirestoreService extends BaseFirestoreService {
 
     List<String> userValues = [];
 
-    final path = returnUsersPath(model);
+    final path = returnUsersPath();
 
     //if user in here data already saved:)
     await path
@@ -196,7 +199,7 @@ class FirestoreService extends BaseFirestoreService {
     AuthModel cachedAuthModel = returnAuthCachedData();
 
     var currentDocument;
-    final path = returnUsersPath(model);
+    final path = returnUsersPath();
 
     final getByUserNumber = database
         .collection('CRAM SCHOOL')

@@ -8,10 +8,7 @@ import 'package:flutter_school/core/product/router/nav_route.dart';
 import 'package:flutter_school/core/product/router/router.dart';
 import 'package:flutter_school/core/product/view_model/home/menu/menu_view_model.dart';
 import 'package:flutter_school/core/service/cache/locale_management.dart';
-import 'package:flutter_school/core/utils/color/scheme_colors.dart';
 import 'package:flutter_school/core/widgets/home/drawer_listtile_widget.dart';
-
-import '../../utils/responsive/app_responsive_sizes.dart';
 
 class DrawerMenu extends ConsumerWidget {
   const DrawerMenu({
@@ -42,16 +39,22 @@ class DrawerMenu extends ConsumerWidget {
                   changePage(ref, 1);
                 }),
             DrawerListTile(
+                iconData: Icons.pattern,
+                title: "Ödevler",
+                press: () {
+                  changePage(ref, 2);
+                }),
+            DrawerListTile(
                 iconData: Icons.add_alert_rounded,
                 title: "Duyurular",
                 press: () {
-                  changePage(ref, 2);
+                  changePage(ref, 3);
                 }),
             DrawerListTile(
                 iconData: Icons.settings,
                 title: "Ayarlar",
                 press: () {
-                  changePage(ref, 3);
+                  changePage(ref, 4);
                 }),
             DrawerListTile(
               iconData: Icons.logout_rounded,

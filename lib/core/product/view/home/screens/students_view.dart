@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_school/core/base/view/base_view.dart';
-import 'package:flutter_school/core/extensions/case_extension.dart';
 import 'package:flutter_school/core/product/view_model/home/screens/student_view_model.dart';
 import 'package:flutter_school/core/riverpod/firebase_riverpod.dart';
 import 'package:flutter_school/core/riverpod/search_field_riverpod.dart';
@@ -23,20 +22,22 @@ class _StudentsViewState extends ConsumerState<StudentsView> {
   StudentViewModel _viewModel = StudentViewModel();
   @override
   Widget build(BuildContext context) {
-    ref.listen(searchBarTextProvider, (previous, next) {
-      if (previous != next) {
-        //if someone type into search bar
-        //our previous and next can not be same
-        setState(() {});
-        //refresh it
-      }
-    });
+    if (mounted) {
+      ref.listen(searchBarTextProvider, (previous, next) {
+        if (previous != next) {
+          //if someone type into search bar
+          //our previous and next can not be same
+          setState(() {});
+          //refresh it
+        }
+      });
+    }
+
     String searchBarText = ref.watch(searchBarTextProvider.notifier).state;
     return BaseView(
       viewModel: _viewModel,
       onPageBuilder: (context, value) {
         return Scaffold(
-          
           appBar: AppBar(
             automaticallyImplyLeading: false,
             elevation: 0,
@@ -80,23 +81,15 @@ class _StudentsViewState extends ConsumerState<StudentsView> {
                                     return const SizedBox();
                                   }
                                   StudentModel singleUser =
-                                      StudentModel.fromMap(
-                                          snapshot.data[index]);
+                                      snapshot.data[index];
 
-                                  if (singleUser.name.toUpc
-                                          .contains(searchBarText.toUpc) ||
-                                      singleUser.userNumber!.toUpc
-                                          .contains(searchBarText.toUpc) ||
-                                      singleUser.lastName.toUpc
-                                          .contains(searchBarText.toUpc)) {
-                                    return StudentCard(
-                                      userData: StudentModel.fromMap(
-                                          snapshot.data[index]),
-                                      index: index,
-                                    );
-                                  } else {
-                                    return const SizedBox();
-                                  }
+                                  return _viewModel.filterAndShow(
+                                      singleUser,
+                                      searchBarText,
+                                      StudentCard(
+                                        userData: snapshot.data[index],
+                                        index: index,
+                                      ));
                                 },
                               );
                             } else {
