@@ -2,9 +2,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_school/core/constants/app/app_constants.dart';
+import 'package:flutter_school/core/constants/enums/announcement_enum.dart';
 import 'package:flutter_school/core/constants/enums/cache_enum.dart';
 import 'package:flutter_school/core/service/cache/locale_management.dart';
 import 'package:flutter_school/core/service/firebase/firestore/base_firestore_service.dart';
+import 'package:flutter_school/models/announcement_model.dart';
 import '../../../../models/auth_model.dart';
 import '../../../../models/student_model.dart';
 
@@ -73,6 +75,7 @@ class FirestoreService extends BaseFirestoreService {
       'profilePicUrl': model.profilePicUrl,
       'userNumber': model.userNumber.toString(),
       'email': model.email,
+      'studentClass': model.studentClass,
     };
 
     try {
@@ -157,6 +160,7 @@ class FirestoreService extends BaseFirestoreService {
       userNumber: int.parse(userData['userNumber']),
       cramSchoolID: int.parse(userData['cramSchoolID']),
       email: userData['email'],
+      studentClass: userData['studentClass'],
     );
   }
 
@@ -218,11 +222,156 @@ class FirestoreService extends BaseFirestoreService {
         'name': model.name,
         'lastName': model.lastName,
         'userNumber': model.userNumber.toString(),
+        'studentClass': model.studentClass,
       });
     } else {
       return await path.doc(currentDocument).update({
         'profilePicUrl': AppConstants.DEFAULT_PROFILE_PICTURE,
       });
+    }
+  }
+
+  @override
+  Future updateAnnouncement(
+      AnnouncementType type, AnnouncementModel model) async {
+    final cramSchoolID = returnAuthCachedData();
+    final announcementPath = database
+        .collection("CRAM SCHOOL")
+        .doc(cramSchoolID.numberID.toString())
+        .collection("Announcements");
+
+    switch (type) {
+      case AnnouncementType.GENERAL_ANNOUNCEMENT:
+        return await announcementPath.doc("general").set(model.toMap());
+      case AnnouncementType.CLASS_ANNOUNCEMENT:
+        return await announcementPath.doc("specificClass").set(model.toMap());
+
+      case AnnouncementType.PRIVATE_ANNOUNCEMENT:
+        return await announcementPath.doc("private").set(model.toMap());
+    }
+  }
+
+  @override
+  Future<List<AnnouncementModel>> getAnnouncements(
+      AnnouncementType type) async {
+    List<AnnouncementModel> announcements = [];
+    final cramSchoolID = returnAuthCachedData().numberID;
+    final announcementPath = database
+        .collection("CRAM SCHOOL")
+        .doc(cramSchoolID.toString())
+        .collection("Announcements");
+
+    switch (type) {
+      case AnnouncementType.GENERAL_ANNOUNCEMENT:
+        await getData(announcementPath, announcements, "general");
+        return announcements;
+
+      case AnnouncementType.CLASS_ANNOUNCEMENT:
+        await getData(announcementPath, announcements, "specificClass");
+        return announcements;
+      case AnnouncementType.PRIVATE_ANNOUNCEMENT:
+        await getData(announcementPath, announcements, "private");
+        return announcements;
+    }
+  }
+
+  Future getData(CollectionReference announcementPath,
+      List<AnnouncementModel> announcements, String filter) async {
+    try {
+      await announcementPath
+          .doc(filter)
+          .collection("Announcements")
+          .get()
+          .then((value) {
+        value.docs.forEach((element) {
+          final data = AnnouncementModel.fromMap(element.data());
+          announcements.add(data);
+        });
+      });
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  @override
+  Future deleteAnnouncement(
+      AnnouncementType type, AnnouncementModel model) async {
+    final cramSchoolID = returnAuthCachedData().numberID;
+
+    late CollectionReference<Map<String, dynamic>> selectedAnnouncementPath;
+    String? announcementUid;
+    late String category;
+
+    switch (type) {
+      case AnnouncementType.GENERAL_ANNOUNCEMENT:
+        category = 'general';
+        selectedAnnouncementPath = database
+            .collection("CRAM SCHOOL")
+            .doc(cramSchoolID.toString())
+            .collection('Announcements')
+            .doc(category)
+            .collection('Announcements');
+
+        await selectedAnnouncementPath.get().then((value) {
+          value.docs.forEach((element) {
+            if (element['title'] == model.title &&
+                element['subtitle'] == model.subtitle &&
+                element['deadline'] == Timestamp.fromDate(model.deadline!)) {
+              announcementUid = element.id;
+            }
+          });
+        });
+
+        break;
+
+      case AnnouncementType.CLASS_ANNOUNCEMENT:
+        category = 'specificClass';
+        selectedAnnouncementPath = database
+            .collection("CRAM SCHOOL")
+            .doc(cramSchoolID.toString())
+            .collection('Announcements')
+            .doc(category)
+            .collection('Announcements');
+
+        await selectedAnnouncementPath.get().then((value) {
+          value.docs.forEach((element) {
+            if (element['title'] == model.title &&
+                element['subtitle'] == model.subtitle &&
+                element['studentClass'] == model.studentClass &&
+                element['deadline'] == Timestamp.fromDate(model.deadline!)) {
+              announcementUid = element.id;
+            }
+          });
+        });
+        break; //private func is not working correctly at now and make funcs shorter
+
+      case AnnouncementType.PRIVATE_ANNOUNCEMENT:
+        category = 'general';
+        selectedAnnouncementPath = database
+            .collection("CRAM SCHOOL")
+            .doc(cramSchoolID.toString())
+            .collection('Announcements')
+            .doc(category)
+            .collection('Announcements');
+
+        await selectedAnnouncementPath.get().then((value) {
+          value.docs.forEach((element) {
+            if (element['title'] == model.title &&
+                element['subtitle'] == model.subtitle &&
+                element['studentNumber'] == model.studentNumber.toString() &&
+                element['deadline'] == Timestamp.fromDate(model.deadline!)) {
+              announcementUid = element.id;
+            }
+          });
+        });
+        break;
+    }
+    if (announcementUid.toString() == null) {
+      print("ERRR");
+    } else {
+      return await selectedAnnouncementPath
+          .doc(announcementUid.toString())
+          .delete();
     }
   }
 }

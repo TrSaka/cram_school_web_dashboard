@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_school/core/product/router/nav_route.dart';
 import 'package:flutter_school/core/riverpod/firebase_riverpod.dart';
 import 'package:flutter_school/models/student_model.dart';
 
@@ -30,8 +31,8 @@ class StudentDeletePopUpWidget extends ConsumerWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           TextButton(
-                            onPressed: ()async {
-                            await  ref
+                            onPressed: () async {
+                              await ref
                                   .read(authProvider)
                                   .deleteUserFromDatabase(userModel)
                                   .then((userDataWithEmailAndPassword) {
@@ -39,7 +40,7 @@ class StudentDeletePopUpWidget extends ConsumerWidget {
                                     userDataWithEmailAndPassword);
                                 debugPrint("Succesfully");
                               });
-                              Navigator.pop(context);
+                              NavRoute(null).toPop(context);
                             },
                             child: contentButtonTexts(context, "Evet"),
                           ),

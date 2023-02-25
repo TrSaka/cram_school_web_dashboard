@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_school/core/widgets/home/search_bar.dart';
+import 'package:flutter_school/core/widgets/global/search_bar.dart';
 import '../../utils/responsive/app_responsive_sizes.dart';
 import 'dropdown_widget.dart';
 

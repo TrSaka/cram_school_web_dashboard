@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../utils/color/scheme_colors.dart';
+import '../../../utils/color/scheme_colors.dart';
 
 class BackgroundColors extends StatelessWidget {
   const BackgroundColors({

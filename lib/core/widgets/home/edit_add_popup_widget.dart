@@ -10,6 +10,7 @@ import 'package:flutter_school/core/utils/responsive/app_responsive_sizes.dart';
 import 'package:flutter_school/core/widgets/global/text_forms.dart';
 import '../../../models/student_model.dart';
 import '../../riverpod/firebase_riverpod.dart';
+import 'save_button.dart';
 
 class StudentAddPopUpButtonWidget extends ConsumerWidget {
   StudentAddPopUpButtonWidget(this.editMode, this.userModel, {super.key});
@@ -30,7 +31,7 @@ class StudentAddPopUpButtonWidget extends ConsumerWidget {
         child: TextButton(
           onPressed: () async {
             if (editMode == true) {
-              await _viewModel.fetchUserDataAndShowInFormField(userModel);
+              await _viewModel.fetchUserDataAndShowInFormField(userModel!);
             }
             showDialog(
               context: context,
@@ -62,6 +63,8 @@ class StudentAddPopUpButtonWidget extends ConsumerWidget {
                                 }
                               },
                               controller: _viewModel.numberController),
+                          sameUserFormField(
+                              "Öğrenci Sınıf", _viewModel.classController),
                           AddUserFormFields(
                               disableType: !editMode,
                               text: "Email",
@@ -122,7 +125,7 @@ class StudentAddPopUpButtonWidget extends ConsumerWidget {
                                 ],
                               ),
                         InkWell(
-                          child: saveButton(context),
+                          child: SaveButton(context: context),
                           onTap: () async {
                             if (formKey.currentState?.validate() ?? false) {
                               if (editMode == false) {
@@ -198,20 +201,6 @@ class StudentAddPopUpButtonWidget extends ConsumerWidget {
     );
   }
 
-  Container saveButton(BuildContext context) {
-    return Container(
-      height: 40,
-      width: 80,
-      decoration: BoxDecoration(
-        color: Theme.of(context).primaryColor,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: const Center(
-        child: Text("Kaydet", style: TextStyle(color: Colors.white)),
-      ),
-    );
-  }
-
   Padding actionButtons(BuildContext context, String text) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0),
@@ -249,7 +238,7 @@ class StudentAddPopUpButtonWidget extends ConsumerWidget {
     return AddUserFormFields(
         text: text,
         validate: (p0) {
-          if (p0!.isEmpty || p0.length < 2) {
+          if (p0!.isEmpty) {
             return "Bu alan zorunlu";
           } else {
             return null;
@@ -258,3 +247,5 @@ class StudentAddPopUpButtonWidget extends ConsumerWidget {
         controller: controller);
   }
 }
+
+

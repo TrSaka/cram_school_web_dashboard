@@ -42,7 +42,7 @@ class _StudentsViewState extends ConsumerState<StudentsView> {
             automaticallyImplyLeading: false,
             elevation: 0,
             centerTitle: true,
-            backgroundColor: Theme.of(context).primaryColor,
+
             title: const Text("Öğrencilerim"), //app bar title
             actions: [
               StudentAddPopUpButtonWidget(false, null),

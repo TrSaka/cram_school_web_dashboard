@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../utils/color/scheme_colors.dart';
-import '../../utils/responsive/app_responsive_sizes.dart';
+import '../../../utils/color/scheme_colors.dart';
+import '../../../utils/responsive/app_responsive_sizes.dart';
 
 class DrawerListTile extends StatelessWidget {
   const DrawerListTile({

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_school/core/constants/app/global/global_keys.dart';
 import 'package:flutter_school/core/widgets/global/text_forms.dart';
 import 'custom_divider.dart';
-import 'login_button.dart';
-import 'remember_me_button.dart';
+import 'button/login_button.dart';
+import 'button/remember_me_button.dart';
 
 class LoginFieldWidget extends StatelessWidget {
   const LoginFieldWidget({super.key});

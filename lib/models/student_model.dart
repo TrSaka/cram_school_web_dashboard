@@ -14,17 +14,19 @@ class StudentModel {
   final int? userNumber;
   final String? uid;
   final String email;
+  final String studentClass;
   StudentModel({
     required this.name,
     required this.lastName,
     required this.password,
-     this.profilePicUrl,
+    this.profilePicUrl,
     required this.cramSchoolID,
     required this.email,
     this.uid,
     this.exams,
     this.announcements,
     this.userNumber,
+    required this.studentClass,
   });
 
   StudentModel copyWith({
@@ -38,6 +40,7 @@ class StudentModel {
     List? exams,
     List? announcements,
     int? userNumber,
+    String? studentClass,
   }) {
     return StudentModel(
       name: name ?? this.name,
@@ -50,6 +53,7 @@ class StudentModel {
       email: email ?? this.email,
       announcements: announcements ?? this.announcements,
       userNumber: userNumber ?? this.userNumber,
+      studentClass: studentClass ?? this.studentClass,
     );
   }
 
@@ -64,7 +68,8 @@ class StudentModel {
       'uid': uid,
       'email': email,
       'announcements': announcements,
-      'userNumber': userNumber
+      'userNumber': userNumber,
+      'studentClass': studentClass,
     };
   }
 
@@ -77,6 +82,7 @@ class StudentModel {
       profilePicUrl: map['profilePicUrl'],
       cramSchoolID: int.parse(map['cramSchoolID']),
       userNumber: int.parse(map['userNumber']),
+      studentClass: map['studentClass'],
     );
   }
 
@@ -94,9 +100,10 @@ class StudentModel {
       password: document?['password'],
       profilePicUrl: document?['profilePicUrl'],
       userNumber: document?['userNumber'],
+      studentClass: document?['studentClass'],
     );
   }
-
+//afk
   String toJson() => json.encode(toMap());
 
   factory StudentModel.fromJson(String source) =>
@@ -104,7 +111,7 @@ class StudentModel {
 
   @override
   String toString() {
-    return 'StudentModel(name: $name, lastName: $lastName, password: $password, profilePicUrl: $profilePicUrl, cramSchoolID: $cramSchoolID, exams: $exams, announcements: $announcements, userNumber: $userNumber, uid: $uid, email: $email)';
+    return 'StudentModel(name: $name, lastName: $lastName, password: $password, profilePicUrl: $profilePicUrl, cramSchoolID: $cramSchoolID, exams: $exams, announcements: $announcements, userNumber: $userNumber, uid: $uid, email: $email, studentClass: $studentClass)';
   }
 
   @override
@@ -120,7 +127,8 @@ class StudentModel {
         listEquals(other.announcements, announcements) &&
         other.email == email &&
         other.userNumber == userNumber &&
-        other.uid == uid;
+        other.uid == uid &&
+        other.studentClass == studentClass;
   }
 
   @override
@@ -134,6 +142,7 @@ class StudentModel {
         email.hashCode ^
         announcements.hashCode ^
         userNumber.hashCode ^
-        uid.hashCode;
+        uid.hashCode ^
+        studentClass.hashCode;
   }
 }

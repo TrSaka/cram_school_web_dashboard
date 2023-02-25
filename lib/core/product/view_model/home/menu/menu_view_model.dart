@@ -20,11 +20,9 @@ class MenuViewModel = _MenuViewModelBase with _$MenuViewModel;
 abstract class _MenuViewModelBase with Store {
   List<Widget> pages = const [
     StudentsView(),
-    ExamResultView(
-
-    ),
-    AnnouncementView(),
+    ExamResultView(),
     HomeWorkView(),
+    AnnouncementView(),
     SettingsView(),
   ];
 

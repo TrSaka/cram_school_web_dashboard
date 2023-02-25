@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_school/core/constants/enums/announcement_enum.dart';
 import 'package:flutter_school/core/service/firebase/auth/firebase_service.dart';
 import 'package:flutter_school/core/service/firebase/firestore/firestore_service.dart';
 import 'package:flutter_school/core/service/firebase/storage/storage_service.dart';
+import 'package:flutter_school/models/announcement_model.dart';
 import 'package:flutter_school/models/auth_model.dart';
 import 'package:flutter_school/models/student_model.dart';
 
@@ -80,9 +82,17 @@ class FirebaseProvider extends ChangeNotifier {
     return await _auth.signOutMethod();
   }
 
+  Future deleteAnnouncement(AnnouncementType type , AnnouncementModel model)async{
+    return await _database.deleteAnnouncement(type, model);
+  }
+
   Future<bool> checkUser() async {
     bool? state = _auth.checkUser();
     return state;
+  }
+
+  Future getAnnouncements(AnnouncementType type) async {
+    return await _database.getAnnouncements(type);
   }
 
   String getAdminUserUid() {

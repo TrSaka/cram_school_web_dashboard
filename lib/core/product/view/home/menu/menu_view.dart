@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_school/core/base/view/base_view.dart';
 import 'package:flutter_school/core/utils/responsive/app_responsive_sizes.dart';
-import 'package:flutter_school/core/widgets/home/header.dart';
+import 'package:flutter_school/core/widgets/global/header.dart';
 import '../../../../widgets/home/dashboard_screen.dart';
-import '../../../../widgets/home/drawer.dart';
+import '../../../../widgets/global/drawer/drawer.dart';
 import '../../../view_model/home/menu/menu_view_model.dart';
 
 class MenuView extends ConsumerStatefulWidget {

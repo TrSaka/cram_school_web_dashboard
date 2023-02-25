@@ -8,7 +8,7 @@ import 'package:flutter_school/core/riverpod/remember_riverpod.dart';
 import 'package:flutter_school/core/service/cache/locale_management.dart';
 import 'package:flutter_school/core/utils/color/scheme_colors.dart';
 import 'package:flutter_school/models/auth_model.dart';
-import '../../product/router/router.dart';
+import '../../../product/router/router.dart';
 
 class LoginButton extends ConsumerWidget {
   final String text;

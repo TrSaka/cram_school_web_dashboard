@@ -19,6 +19,7 @@ abstract class _StudentViewModelBase with Store {
   TextEditingController numberController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passWordController = TextEditingController();
+  TextEditingController classController = TextEditingController();
 
   AuthModel cachedAuthModel = LocalManagement.instance
       .fetchAuth(SharedPreferencesKeys.HIDE_CACHE_AUTH.toString());
@@ -31,24 +32,19 @@ abstract class _StudentViewModelBase with Store {
       password: userModel!.password, // can not be changed
       cramSchoolID: cachedAuthModel.numberID, //admin's id
       email: userModel!.email, //can not be changed
+      studentClass: classController.text,
     );
   }
 
-   filterAndShow(StudentModel singleUser, String searchBarText,
-                                      widget) {
-                                    if (singleUser.name.toUpc
-                                            .contains(searchBarText.toUpc) ||
-                                        singleUser.userNumber!.toUpc
-                                            .contains(searchBarText.toUpc) ||
-                                        singleUser.lastName.toUpc
-                                            .contains(searchBarText.toUpc)) {
-                                      return widget;
-                                    } else {
-                                      return const SizedBox();
-                                    }
-                                  }
-  
-  
+  filterAndShow(StudentModel singleUser, String searchBarText, widget) {
+    if (singleUser.name.toUpc.contains(searchBarText.toUpc) ||
+        singleUser.userNumber!.toUpc.contains(searchBarText.toUpc) ||
+        singleUser.lastName.toUpc.contains(searchBarText.toUpc)) {
+      return widget;
+    } else {
+      return const SizedBox();
+    }
+  }
 
   StudentModel convertModelForSave(AuthModel authModel) {
     return StudentModel(
@@ -59,14 +55,16 @@ abstract class _StudentViewModelBase with Store {
       profilePicUrl: AppConstants.DEFAULT_PROFILE_PICTURE,
       cramSchoolID: authModel.numberID,
       userNumber: int.parse(numberController.text),
+      studentClass: classController.text,
     );
   }
 
-  fetchUserDataAndShowInFormField(userModel) {
-    emailController.text = userModel!.email;
-    passWordController.text = userModel!.password;
-    lastNameController.text = userModel!.lastName;
-    numberController.text = userModel!.userNumber.toString();
-    nameController.text = userModel!.name;
+  fetchUserDataAndShowInFormField(StudentModel userModel) {
+    emailController.text = userModel.email;
+    passWordController.text = userModel.password;
+    lastNameController.text = userModel.lastName;
+    numberController.text = userModel.userNumber.toString();
+    nameController.text = userModel.name;
+    classController.text = userModel.studentClass;
   }
 }

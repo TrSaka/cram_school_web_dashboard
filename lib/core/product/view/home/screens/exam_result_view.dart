@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_school/core/base/view/base_view.dart';
-import 'package:flutter_school/core/extensions/case_extension.dart';
 import 'package:flutter_school/core/product/view_model/home/exam_result_view_model.dart';
 import 'package:flutter_school/core/riverpod/firebase_riverpod.dart';
 import 'package:flutter_school/core/riverpod/search_field_riverpod.dart';
@@ -50,7 +49,7 @@ class _ExamResultViewState extends ConsumerState<ExamResultView> {
         return Scaffold(
             appBar: AppBar(
               title: const Text("Öğrenci Notları"),
-              backgroundColor: Theme.of(context).primaryColor,
+
               actions: [
                 Padding(
                   padding: const EdgeInsets.only(
