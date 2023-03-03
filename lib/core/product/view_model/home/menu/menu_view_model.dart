@@ -55,6 +55,6 @@ class PageNotifier extends Notifier<int> {
 
   @override
   int build() {
-    return 0;
+    return 3; //0 default
   }
 }

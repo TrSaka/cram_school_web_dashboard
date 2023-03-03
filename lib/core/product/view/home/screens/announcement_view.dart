@@ -7,6 +7,7 @@ import 'package:flutter_school/core/riverpod/firebase_riverpod.dart';
 import 'package:flutter_school/core/utils/color/scheme_colors.dart';
 import 'package:flutter_school/models/announcement_model.dart';
 
+import '../../../../widgets/home/create_announcement_popup_widget.dart';
 import '../../../../widgets/home/get_announcement_widget.dart';
 import '../../../view_model/home/screens/announcement_view_model.dart';
 
@@ -54,23 +55,10 @@ class _AnnouncementViewState extends ConsumerState<AnnouncementView>
                   controller: _tabController,
                   isScrollable: true,
                   labelPadding: const EdgeInsets.symmetric(horizontal: 30),
-                  tabs: const [
-                    Tab(
-                      child: Text(
-                        "Genel Duyuru",
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    ),
-                    Tab(
-                        child: Text(
-                      "Sınıf Duyurusu",
-                      style: TextStyle(color: Colors.black),
-                    )),
-                    Tab(
-                        child: Text(
-                      "Öğrenciye Özel",
-                      style: TextStyle(color: Colors.black),
-                    )),
+                  tabs: [
+                    textTab("Genel Duyuru"),
+                    textTab("Sınıfa Özel"),
+                    textTab("Öğrenciye Özel"),
                   ],
                 ),
               ),
@@ -80,10 +68,9 @@ class _AnnouncementViewState extends ConsumerState<AnnouncementView>
             children: [
               const SizedBox(height: 10),
               const SizedBox(height: 25),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.add, size: 18),
-                label: const Text("Yeni Duyuru Ekle"),
-                onPressed: () {},
+              CreateAnnouncementWidget(
+                _viewModel.announcementTypes[_tabController.index],
+                false, //this button for create new object so it is false
               ),
               const SizedBox(height: 10),
               Expanded(
@@ -103,6 +90,15 @@ class _AnnouncementViewState extends ConsumerState<AnnouncementView>
       onModelReady: (model) {
         _viewModel = model;
       },
+    );
+  }
+
+  Tab textTab(String text) {
+    return Tab(
+      child: Text(
+        text,
+        style: const TextStyle(color: Colors.black),
+      ),
     );
   }
 

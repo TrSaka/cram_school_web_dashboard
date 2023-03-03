@@ -54,8 +54,8 @@ class GetAnnouncementWidget extends ConsumerWidget {
                                 color: Colors.green,
                               )),
                           IconButton(
-                              onPressed: () {
-                                ref.read(authProvider).deleteAnnouncement(
+                              onPressed: () async {
+                                await ref.read(authProvider).deleteAnnouncement(
                                     _viewModel.announcementTypes[
                                         _tabController.index],
                                     announcementModel);

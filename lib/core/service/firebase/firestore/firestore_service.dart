@@ -346,7 +346,7 @@ class FirestoreService extends BaseFirestoreService {
         break; //private func is not working correctly at now and make funcs shorter
 
       case AnnouncementType.PRIVATE_ANNOUNCEMENT:
-        category = 'general';
+        category = 'private';
         selectedAnnouncementPath = database
             .collection("CRAM SCHOOL")
             .doc(cramSchoolID.toString())
