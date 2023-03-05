@@ -49,7 +49,6 @@ class _ExamResultViewState extends ConsumerState<ExamResultView> {
         return Scaffold(
             appBar: AppBar(
               title: const Text("Öğrenci Notları"),
-
               actions: [
                 Padding(
                   padding: const EdgeInsets.only(
@@ -91,43 +90,10 @@ class _ExamResultViewState extends ConsumerState<ExamResultView> {
                                 rowsPerPage: 10,
                                 columnSpacing: 10,
                                 columns: [
-                                  DataColumn(
-                                      label: const Text(
-                                        "İsim / Soy İsim",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 14),
-                                      ),
-                                      onSort: (columnIndex, ascending) {
-                                        setState(() {
-                                          sort = !sort;
-                                        });
-                                        onsortColum(columnIndex, ascending);
-                                      }),
-                                  const DataColumn(
-                                    label: Text(
-                                      "Okul Numarası",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 14),
-                                    ),
-                                  ),
-                                  const DataColumn(
-                                    label: Text(
-                                      "Son Sınav Puanı",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 14),
-                                    ),
-                                  ),
-                                  const DataColumn(
-                                    label: Text(
-                                      "",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 14),
-                                    ),
-                                  ),
+                                  dataColumn("İsim / Soy İsim"),
+                                  dataColumn("Okul Numarası"),
+                                  dataColumn("Son Sınav Puanı"),
+                                  dataColumn(""),
                                 ],
                               ),
                             ),
@@ -142,6 +108,20 @@ class _ExamResultViewState extends ConsumerState<ExamResultView> {
                 }));
       },
     );
+  }
+
+  DataColumn dataColumn(String text) {
+    return DataColumn(
+        label: Text(
+          text,
+          style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+        ),
+        onSort: (columnIndex, ascending) {
+          setState(() {
+            sort = !sort;
+          });
+          onsortColum(columnIndex, ascending);
+        });
   }
 }
 

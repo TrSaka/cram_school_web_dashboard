@@ -2,14 +2,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_school/core/base/view/base_view.dart';
 import 'package:flutter_school/core/constants/app/app_constants.dart';
-import 'package:flutter_school/core/widgets/global/text_forms.dart';
 import '../../../base/state/base_state.dart';
-
 import '../../../widgets/auth/background/background_colors.dart';
 import '../../../widgets/auth/background/background_text.dart';
 import '../../../widgets/auth/copy_right_text_widget.dart';
 import '../../../widgets/auth/login_field.dart';
-
 import '../../view_model/auth/login_view_model.dart';
 
 class LoginView extends StatefulWidget {

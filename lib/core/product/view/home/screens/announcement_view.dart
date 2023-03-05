@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_school/core/base/view/base_view.dart';
-
-import 'package:flutter_school/core/riverpod/firebase_riverpod.dart';
+import 'package:flutter_school/core/riverpod/search_field_riverpod.dart';
 import 'package:flutter_school/core/utils/color/scheme_colors.dart';
-import 'package:flutter_school/models/announcement_model.dart';
-
 import '../../../../widgets/home/create_announcement_popup_widget.dart';
 import '../../../../widgets/home/get_announcement_widget.dart';
 import '../../../view_model/home/screens/announcement_view_model.dart';
@@ -28,11 +24,17 @@ class _AnnouncementViewState extends ConsumerState<AnnouncementView>
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-    _tabController.animateTo(2);
+    _tabController.animateTo(0);
   }
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(searchBarTextProvider, (oldText, newText) {
+      if (oldText != newText) {
+        setState(() {});
+      }
+    });
+
     return BaseView(
       viewModel: _viewModel,
       onPageBuilder: (context, value) {
@@ -68,10 +70,10 @@ class _AnnouncementViewState extends ConsumerState<AnnouncementView>
             children: [
               const SizedBox(height: 10),
               const SizedBox(height: 25),
-              CreateAnnouncementWidget(
-                _viewModel.announcementTypes[_tabController.index],
-                false, //this button for create new object so it is false
-              ),
+              CreateEditAnnouncementWidget(
+                  _tabController,
+                  false, //this button for create new object so it is false
+                  null),
               const SizedBox(height: 10),
               Expanded(
                 child: TabBarView(

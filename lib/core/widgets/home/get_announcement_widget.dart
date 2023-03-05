@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_school/core/extensions/case_extension.dart';
+import 'package:flutter_school/core/riverpod/search_field_riverpod.dart';
+import 'package:flutter_school/core/widgets/global/circular_progess_widget.dart';
 import '../../../models/announcement_model.dart';
 import '../../product/view_model/home/screens/announcement_view_model.dart';
 import '../../riverpod/firebase_riverpod.dart';
+import 'announcement_card_widget.dart';
 
 class GetAnnouncementWidget extends ConsumerWidget {
   const GetAnnouncementWidget({
@@ -20,6 +24,11 @@ class GetAnnouncementWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen(searchBarTextProvider, (oldText, newText) {
+      oldText != newText;
+    });
+
+    String searchedText = ref.watch(searchBarTextProvider.notifier).state;
     return FutureBuilder(
       future: ref
           .read(authProvider)
@@ -30,48 +39,29 @@ class GetAnnouncementWidget extends ConsumerWidget {
             itemCount: snapshot.data.length,
             itemBuilder: (context, index) {
               AnnouncementModel announcementModel = snapshot.data[index];
-              return Card(
-                margin:
-                    const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                child: ListTile(
-                  leading: const Icon(
-                    Icons.circle_notifications,
-                    color: Colors.blue,
-                  ),
-                  title: Text(announcementModel.subtitle),
-                  subtitle: Text(announcementModel.title),
-                  trailing: SizedBox(
-                      height: 50,
-                      width: MediaQuery.of(context).size.width / 6,
-                      child: Row(
-                        children: [
-                          Text(announcementModel.deadline!.toString()),
-                          const SizedBox(width: 20),
-                          IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.edit,
-                                color: Colors.green,
-                              )),
-                          IconButton(
-                              onPressed: () async {
-                                await ref.read(authProvider).deleteAnnouncement(
-                                    _viewModel.announcementTypes[
-                                        _tabController.index],
-                                    announcementModel);
-                              },
-                              icon: const Icon(
-                                Icons.delete,
-                                color: Colors.red,
-                              )),
-                        ],
-                      )),
-                ),
-              );
+              if (searchedText == "") {
+                return AnnouncementCardWidget(
+                  announcementModel: announcementModel,
+                  viewModel: _viewModel,
+                  tabController: _tabController,
+                );
+              } else if (announcementModel.title.toUpc
+                      .contains(searchedText.toUpc) ||
+                  announcementModel.subtitle.toUpc
+                      .contains(searchedText.toUpc) ||
+                  announcementModel.deadline.toUpc.contains(searchedText)) {
+                return AnnouncementCardWidget(
+                  announcementModel: announcementModel,
+                  viewModel: _viewModel,
+                  tabController: _tabController,
+                );
+              } else {
+                return const SizedBox();
+              }
             },
           );
         } else {
-          return const Center(child: Text("Data is null"));
+          return const CustomCircular();
         }
       },
     );

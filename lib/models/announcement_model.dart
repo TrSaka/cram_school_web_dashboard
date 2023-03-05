@@ -1,13 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AnnouncementModel {
   final String subtitle;
   final String title;
   final DateTime? deadline;
-  final String? studentClass;
+  late final String? studentClass;
   final int? studentNumber;
   AnnouncementModel({
     required this.subtitle,
@@ -33,13 +32,29 @@ class AnnouncementModel {
     );
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toGeneral() {
     return <String, dynamic>{
       'subtitle': subtitle,
       'title': title,
-      'deadline': deadline?.millisecondsSinceEpoch,
+      'deadline': deadline,
+    };
+  }
+
+  Map<String, dynamic> toClass() {
+    return <String, dynamic>{
+      'title': title,
+      'subtitle': subtitle,
+      'deadline': deadline,
       'studentClass': studentClass,
-      'studentNumber': studentNumber,
+    };
+  }
+
+  Map<String, dynamic> toPrivate() {
+    return <String, dynamic>{
+      'title': title,
+      'subtitle': subtitle,
+      'deadline': deadline,
+      'studentNumber': studentNumber.toString(),
     };
   }
 
@@ -56,8 +71,6 @@ class AnnouncementModel {
           map['studentNumber'] != null ? int.parse(map['studentNumber']) : null,
     );
   }
-
-  String toJson() => json.encode(toMap());
 
   factory AnnouncementModel.fromJson(String source) =>
       AnnouncementModel.fromMap(json.decode(source) as Map<String, dynamic>);

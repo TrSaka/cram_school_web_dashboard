@@ -39,22 +39,16 @@ class DrawerMenu extends ConsumerWidget {
                   changePage(ref, 1);
                 }),
             DrawerListTile(
-                iconData: Icons.pattern,
-                title: "Ödevler",
-                press: () {
-                  changePage(ref, 2);
-                }),
-            DrawerListTile(
                 iconData: Icons.add_alert_rounded,
                 title: "Duyurular",
                 press: () {
-                  changePage(ref, 3);
+                  changePage(ref, 2);
                 }),
             DrawerListTile(
                 iconData: Icons.settings,
                 title: "Ayarlar",
                 press: () {
-                  changePage(ref, 4);
+                  changePage(ref, 3);
                 }),
             DrawerListTile(
               iconData: Icons.logout_rounded,

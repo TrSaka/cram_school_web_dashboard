@@ -82,7 +82,8 @@ class FirebaseProvider extends ChangeNotifier {
     return await _auth.signOutMethod();
   }
 
-  Future deleteAnnouncement(AnnouncementType type , AnnouncementModel model)async{
+  Future deleteAnnouncement(
+      AnnouncementType type, AnnouncementModel model) async {
     return await _database.deleteAnnouncement(type, model);
   }
 
@@ -93,6 +94,21 @@ class FirebaseProvider extends ChangeNotifier {
 
   Future getAnnouncements(AnnouncementType type) async {
     return await _database.getAnnouncements(type);
+  }
+
+  Future updateAnnouncement(
+      AnnouncementType type, AnnouncementModel newModel, AnnouncementModel oldModel) async {
+    return await _database.updateAnnouncement(type, newModel,oldModel);
+  }
+
+  Future getSingleAnnoucement(
+      AnnouncementType type, AnnouncementModel model) async {
+    return await _database.getSingleAnnouncement(type, model);
+  }
+
+  Future createAnnouncement(
+      AnnouncementType type, AnnouncementModel model) async {
+    return await _database.createAnnouncement(type, model);
   }
 
   String getAdminUserUid() {

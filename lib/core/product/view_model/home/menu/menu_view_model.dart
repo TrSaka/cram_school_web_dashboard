@@ -7,7 +7,6 @@ import 'package:flutter_school/core/product/router/nav_route.dart';
 import 'package:flutter_school/core/product/router/router.dart';
 import 'package:flutter_school/core/product/view/home/screens/announcement_view.dart';
 import 'package:flutter_school/core/product/view/home/screens/exam_result_view.dart';
-import 'package:flutter_school/core/product/view/home/screens/homeworks_view.dart';
 import 'package:flutter_school/core/product/view/home/screens/settings_view.dart';
 import 'package:flutter_school/core/product/view/home/screens/students_view.dart';
 import 'package:flutter_school/core/riverpod/firebase_riverpod.dart';
@@ -21,7 +20,6 @@ abstract class _MenuViewModelBase with Store {
   List<Widget> pages = const [
     StudentsView(),
     ExamResultView(),
-    HomeWorkView(),
     AnnouncementView(),
     SettingsView(),
   ];

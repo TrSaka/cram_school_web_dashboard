@@ -1,11 +1,8 @@
 // ignore_for_file: unrelated_type_equality_checks
 
 import 'dart:convert';
-
-import 'package:flutter/material.dart';
 import 'package:flutter_school/core/constants/enums/cache_enum.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../../models/auth_model.dart';
 
 class LocalManagement {
