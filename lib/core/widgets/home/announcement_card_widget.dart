@@ -40,9 +40,9 @@ class AnnouncementCardWidget extends ConsumerWidget {
                 Text(
                   "${announcementDate.day} / ${announcementDate.month} / ${announcementDate.year}",
                   style: TextStyle(
-                    color: announcementDate.day <= currentDate.day &&
-                            announcementDate.hour < currentDate.hour &&
-                            announcementDate.minute < currentDate.minute
+                    color: announcementDate.day <=
+                            currentDate
+                                .day // kırmızı yapılacak eğer tarih geçmişse.
                         ? Colors.red
                         : Colors.black,
                   ),

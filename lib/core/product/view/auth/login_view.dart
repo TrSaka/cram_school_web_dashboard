@@ -32,6 +32,7 @@ class _LoginViewState extends BaseState<LoginView> {
         viewModel: LoginViewModel(),
         onPageBuilder: (context, value) {
           return Scaffold(
+            
             body: SizedBox(
               width: getWidth(1),
               height: getHeight(1),
