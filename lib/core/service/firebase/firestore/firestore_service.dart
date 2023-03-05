@@ -1,6 +1,4 @@
 // ignore_for_file: prefer_conditional_assignment, avoid_function_literals_in_foreach_calls
-import 'dart:html';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_school/core/constants/app/app_constants.dart';
