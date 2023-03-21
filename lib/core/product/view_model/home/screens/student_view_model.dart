@@ -39,7 +39,8 @@ abstract class _StudentViewModelBase with Store {
   filterAndShow(StudentModel singleUser, String searchBarText, widget) {
     if (singleUser.name.toUpc.contains(searchBarText.toUpc) ||
         singleUser.userNumber!.toUpc.contains(searchBarText.toUpc) ||
-        singleUser.lastName.toUpc.contains(searchBarText.toUpc)) {
+        singleUser.lastName.toUpc.contains(searchBarText.toUpc) ||
+        singleUser.studentClass.toUpc.contains(searchBarText.toUpc)) {
       return widget;
     } else {
       return const SizedBox();

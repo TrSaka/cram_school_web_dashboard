@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_school/core/base/view/base_view.dart';
 import 'package:flutter_school/core/riverpod/search_field_riverpod.dart';
 import 'package:flutter_school/core/utils/color/scheme_colors.dart';
+import '../../../../widgets/global/tab_bar_widget.dart';
 import '../../../../widgets/home/create_announcement_popup_widget.dart';
 import '../../../../widgets/home/get_announcement_widget.dart';
 import '../../../view_model/home/screens/announcement_view_model.dart';
@@ -68,8 +69,7 @@ class _AnnouncementViewState extends ConsumerState<AnnouncementView>
           ),
           body: Column(
             children: [
-              const SizedBox(height: 10),
-              const SizedBox(height: 25),
+              const SizedBox(height: 35),
               CreateEditAnnouncementWidget(
                   _tabController,
                   false, //this button for create new object so it is false
@@ -95,14 +95,7 @@ class _AnnouncementViewState extends ConsumerState<AnnouncementView>
     );
   }
 
-  Tab textTab(String text) {
-    return Tab(
-      child: Text(
-        text,
-        style: const TextStyle(color: Colors.black),
-      ),
-    );
-  }
+
 
   GetAnnouncementWidget getAnnouncementListWidget() {
     return GetAnnouncementWidget(

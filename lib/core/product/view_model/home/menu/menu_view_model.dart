@@ -6,12 +6,13 @@ import 'package:flutter_school/core/constants/enums/cache_enum.dart';
 import 'package:flutter_school/core/product/router/nav_route.dart';
 import 'package:flutter_school/core/product/router/router.dart';
 import 'package:flutter_school/core/product/view/home/screens/announcement_view.dart';
-import 'package:flutter_school/core/product/view/home/screens/exam_result_view.dart';
+import 'package:flutter_school/core/product/view/home/screens/exam/exam_result_view.dart';
 import 'package:flutter_school/core/product/view/home/screens/settings_view.dart';
 import 'package:flutter_school/core/product/view/home/screens/students_view.dart';
 import 'package:flutter_school/core/riverpod/firebase_riverpod.dart';
 import 'package:flutter_school/core/service/cache/locale_management.dart';
 import 'package:mobx/mobx.dart';
+import '../../../view/home/screens/exam/create_exam_view.dart';
 part 'menu_view_model.g.dart';
 
 class MenuViewModel = _MenuViewModelBase with _$MenuViewModel;
@@ -20,6 +21,7 @@ abstract class _MenuViewModelBase with Store {
   List<Widget> pages = const [
     StudentsView(),
     ExamResultView(),
+    CreateExamView(),
     AnnouncementView(),
     SettingsView(),
   ];
@@ -53,6 +55,6 @@ class PageNotifier extends Notifier<int> {
 
   @override
   int build() {
-    return 3; //0 default
+    return 2; //0 default
   }
 }
