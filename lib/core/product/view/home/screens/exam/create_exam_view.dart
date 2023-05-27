@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_school/core/base/view/base_view.dart';
-import 'package:flutter_school/core/utils/responsive/app_responsive_sizes.dart';
-import 'package:flutter_school/core/widgets/global/dropdown_widget.dart';
-
 import '../../../../../utils/color/scheme_colors.dart';
 import '../../../../../widgets/global/tab_bar_widget.dart';
 import '../../../../view_model/home/screens/exam/create_exam_view_model.dart';
@@ -24,7 +21,7 @@ class _CreateExamViewState extends ConsumerState<CreateExamView>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 5, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
     _tabController.animateTo(0);
   }
 

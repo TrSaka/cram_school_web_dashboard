@@ -2,12 +2,13 @@
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_school/core/constants/enums/cache_enum.dart';
 import 'package:flutter_school/core/service/cache/locale_management.dart';
 import 'package:flutter_school/core/service/firebase/storage/base_storage.dart';
+import 'package:flutter_school/models/auth_model.dart';
 import 'package:flutter_school/models/exam_model.dart';
-import '../../../../models/auth_model.dart';
 
 class StorageService extends BaseFirebaseStorage {
   static StorageService? _instance;
@@ -18,10 +19,8 @@ class StorageService extends BaseFirebaseStorage {
 
   StorageService._init();
 
-  AuthModel returnAuthCachedData() {
-    return LocalManagement.instance
-        .fetchAuth(SharedPreferencesKeys.HIDE_CACHE_AUTH.toString());
-  }
+  AuthModel authCachedData = LocalManagement.instance
+      .fetchAuth(SharedPreferencesKeys.HIDE_CACHE_AUTH.toString());
 
   @override
   Future<dynamic>? fetchDefaultProfilePic() async {
@@ -34,24 +33,31 @@ class StorageService extends BaseFirebaseStorage {
   }
 
   @override
-  Future storeExamTxtFile(ExamModel model, String txtName) async {
-    final String cramSchoolID = returnAuthCachedData().numberID.toString();
+  Future fetchAndStoreTxtFile(ExamModel model) async {
+    final String cramSchoolID = authCachedData.numberID.toString();
 
-    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+    final result = await FilePicker.platform.pickFiles(
+      allowMultiple: false,
+      allowedExtensions: ['txt'],
+      type: FileType.custom,
+    );
 
-    result == null ? null : debugPrint("File Selected");
-    txtName = txtName.contains("txt") == true ? txtName : "$txtName.txt";
+    if (result != null && result.files.isNotEmpty) {
+      final platformFile = result.files.single;
+      final blob = platformFile.bytes; //web byte android path
+      final txtName = platformFile.name; //selected document's name
 
-    Reference storageRef =
-        storage.ref("$cramSchoolID/exams/${model.examName}/").child(txtName);
+      Reference storageRef =
+          storage.ref("$cramSchoolID/exams/${model.examName}/").child(txtName);
 
-    String filePath = "$cramSchoolID/exams/${model.examName}/$txtName";
-    File file = File(filePath);
-
-    try {
-      return await storageRef.putFile(file);
-    } catch (e) {
-      debugPrint(e.toString());
+      try {
+        debugPrint("Storage has been completed");
+        return await storageRef.putData(blob!);
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+    } else {
+      debugPrint("No file selected.");
     }
   }
 }

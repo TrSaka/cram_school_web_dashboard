@@ -6,5 +6,5 @@ abstract class BaseFirebaseStorage {
 
   Future? fetchDefaultProfilePic();
 
-  Future storeExamTxtFile(ExamModel model,String txtName);
+  Future fetchAndStoreTxtFile(ExamModel model);
 }

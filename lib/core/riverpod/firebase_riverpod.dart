@@ -9,6 +9,8 @@ import 'package:flutter_school/models/announcement_model.dart';
 import 'package:flutter_school/models/auth_model.dart';
 import 'package:flutter_school/models/student_model.dart';
 
+import '../../models/exam_model.dart';
+
 class FirebaseProvider extends ChangeNotifier {
   bool _isLoading = false;
   UserCredential? _userCredential;
@@ -96,9 +98,9 @@ class FirebaseProvider extends ChangeNotifier {
     return await _database.getAnnouncements(type);
   }
 
-  Future updateAnnouncement(
-      AnnouncementType type, AnnouncementModel newModel, AnnouncementModel oldModel) async {
-    return await _database.updateAnnouncement(type, newModel,oldModel);
+  Future updateAnnouncement(AnnouncementType type, AnnouncementModel newModel,
+      AnnouncementModel oldModel) async {
+    return await _database.updateAnnouncement(type, newModel, oldModel);
   }
 
   Future getSingleAnnoucement(
@@ -113,6 +115,10 @@ class FirebaseProvider extends ChangeNotifier {
 
   String getAdminUserUid() {
     return _auth.getAdminUid();
+  }
+
+  Future getTxtAndStore(ExamModel model) async {
+    return await _storage.fetchAndStoreTxtFile(model);
   }
 
   setLoader(loader) {
