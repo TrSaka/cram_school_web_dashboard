@@ -1,16 +1,37 @@
-# flutter_school
+# Cram School Web Dashboard
+Student Information System
 
-A new Flutter project.
+Credits: 
+UI Design Omer Gedikoglu
+Development: Enes Vural
 
-## Getting Started
+Services:
+Shared Preferences for cache management.
+Firebase Auth & Firestore & Firebsae Storage
+Firebase Hosting
+MVVM architecture
+State Management: Mobx & Riverpod
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+Features:
+authentication 
+add edit remove student
+set profile picture for student
+reset student password
+create announcement for (general,class,student)
+show student's profile picture in admin panel
+show student's exam result in table
+search bar for filter students (name, lastname, student number)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Future Enhancements
+add student exam result via Excell Table
+Mobile application support
+Settings page must be set
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+Images:
+![Screenshot 2024-11-24 at 18 07 47](https://github.com/user-attachments/assets/177c0497-425c-44de-a6fd-785a2d1dbb64)
+
+
+
+
